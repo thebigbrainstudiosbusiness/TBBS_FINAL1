@@ -63,89 +63,145 @@ function Navbar({
   currentPage,
   setPendingScrollTarget
 }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+ useEffect(() => {
+  setMobileOpen(false);
+}, [currentPage]);
 
-  return (
-    <nav
-      className="fixed top-4 left-1/2 z-50 -translate-x-1/2 transition-all duration-300 hover:scale-105"
-      style={{ width: "90%", maxWidth: "1150px", height: NAVBAR_HEIGHT }}
+return (
+  <nav
+    className="fixed top-4 left-1/2 z-50 -translate-x-1/2 transition-all duration-300 hover:scale-105"
+    style={{ width: "90%", maxWidth: "1150px", height: NAVBAR_HEIGHT }}
+  >
+    {/* MAIN BAR */}
+    <div
+      className={`
+        w-full h-full flex items-center justify-between px-6
+        rounded-3xl border backdrop-blur-2xl transition-all duration-300
+        ${
+          scrolledPastHero
+            ? "bg-white/10 border-white/20"
+            : "bg-white/10 border-white/10"
+        }
+      `}
     >
-      <div
-        className={`
-            w-full h-full flex items-center justify-between px-6 
-            rounded-3xl border backdrop-blur-2xl transition-all duration-300
-            ${
-              scrolledPastHero
-                ? "bg-white/10 bg-opacity-20 border-white/20"
-                : "bg-white/10 bg-opacity-10 border-white/10"
+      {/* LOGO */}
+      <img
+        src={LOGO_URL}
+        alt="Big Brain Studios"
+        className="h-10 md:h-16 w-auto"
+      />
+
+      {/* DESKTOP MENU */}
+      <div className="hidden md:flex items-center space-x-8 font-medium">
+        <button
+          onClick={() => {
+            if (currentPage === "home") nativeScrollToSection("hero");
+            else {
+              setPendingScrollTarget("hero");
+              setCurrentPage("home");
             }
-          `}
-      >
-        <img src={LOGO_URL} alt="Big Brain Studios" className="h-28 w-auto" />
+          }}
+          className="hover:text-red-500 transition"
+        >
+          Home
+        </button>
 
-        <div className="flex items-center space-x-8 font-medium">
-<button
-  onClick={() => {
-    if (currentPage === "home") {
-      nativeScrollToSection("hero");
-    } else {
-      setPendingScrollTarget("hero");
-      setCurrentPage("home");
-    }
-  }}
-  className="transition-all duration-300 hover:text-red-500 hover:scale-110"
->
-  Home
-</button>
+        <button
+          onClick={() => {
+            if (currentPage === "home") nativeScrollToSection("about");
+            else {
+              setPendingScrollTarget("about");
+              setCurrentPage("home");
+            }
+          }}
+          className="hover:text-red-500 transition"
+        >
+          About
+        </button>
 
+        <button
+          onClick={() => setCurrentPage("services")}
+          className="hover:text-red-500 transition"
+        >
+          Services
+        </button>
 
-<button
-  onClick={() => {
-    if (currentPage === "home") {
-      nativeScrollToSection("about");
-    } else {
-      setPendingScrollTarget("about");
-      setCurrentPage("home");
-    }
-  }}
-  className="transition-all duration-300 hover:text-red-500 hover:scale-110"
->
-  About
-</button>
+        <button
+          onClick={() => setCurrentPage("projects")}
+          className="hover:text-red-500 transition"
+        >
+          Projects
+        </button>
 
-
-
-<button
-  onClick={() => setCurrentPage("services")}
-  className="transition-all duration-300 hover:text-red-500 hover:scale-110"
->
-  Services
-</button>
-
-
-          <button
-            onClick={() => setCurrentPage("projects")}
-            className="transition-all duration-300 hover:text-red-500 hover:scale-110"
-          >
-            Projects
-          </button>
-
-          <button
-            onClick={() => {
-              if (currentPage === "home") {
-                nativeScrollToSection("contact-home");
-              } else {
-                setPendingScrollTarget("contact-home");
-                setCurrentPage("home");
-              }
-            }}
-            className={`px-5 py-2 rounded-xl transition-all duration-300 bg-red-600 text-white`}
-          >
-            Contact
-          </button>
-        </div>
+        <button
+          onClick={() => {
+            if (currentPage === "home") nativeScrollToSection("contact-home");
+            else {
+              setPendingScrollTarget("contact-home");
+              setCurrentPage("home");
+            }
+          }}
+          className="px-5 py-2 rounded-xl bg-red-600 text-white"
+        >
+          Contact
+        </button>
       </div>
-    </nav>
-  );
+
+      {/* MOBILE HAMBURGER */}
+      <button
+        className="md:hidden text-white text-3xl"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label="Open menu"
+      >
+        ☰
+      </button>
+    </div>
+
+    {/* MOBILE MENU */}
+    {mobileOpen && (
+      <div className="md:hidden absolute top-full left-0 w-full mt-4 rounded-2xl bg-black/90 backdrop-blur-xl border border-white/10 p-6 space-y-6 text-center">
+        {["Home", "About", "Services", "Projects"].map((label) => (
+          <button
+            key={label}
+            className="block w-full text-lg font-semibold hover:text-red-500 transition"
+onClick={() => {
+  setMobileOpen(false);
+
+  if (label === "Home") {
+    setCurrentPage("home");
+    setPendingScrollTarget("hero");
+  }
+
+  if (label === "Services") setCurrentPage("services");
+  if (label === "Projects") setCurrentPage("projects");
+
+  if (label === "About") {
+    setCurrentPage("home");
+    setPendingScrollTarget("about");
+  }
+}}
+
+          >
+            {label}
+          </button>
+        ))}
+
+        <button
+          className="w-full bg-red-600 py-3 rounded-xl font-bold"
+          onClick={() => {
+            setMobileOpen(false);
+            setCurrentPage("home");
+            setPendingScrollTarget("contact-home");
+          }}
+        >
+          Contact
+        </button>
+      </div>
+    )}
+  </nav>
+);
+
 }
 
 // -------------------------
