@@ -247,7 +247,7 @@ const handleSubmit = async (e) => {
 
         {/* Premium Glass Card */}
         <div className="relative">
-          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
+          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
             {/* subtle gradients and highlights */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5" />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_500px_at_10%_-20%,rgba(239,68,68,0.08),transparent)]" />
@@ -367,6 +367,8 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
 
 
 <video
+  preload="none"
+  poster="/hero-poster.jpg"
   key={homeHeroData?.videoUrl}   // 👈 forces reload when URL changes
   autoPlay
   loop
@@ -429,7 +431,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
 
     {/* LEFT PREVIEW */}
     <div className="lg:w-2/5">
-      <div className="relative sticky top-32 rounded-3xl overflow-hidden border border-white/15 bg-white/5 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
+      <div className="relative sticky top-32 rounded-3xl overflow-hidden border border-white/15 bg-white/5 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
         <AnimatePresence mode="wait">
           <motion.div
             key={services[activeService]?.image || 'loading'}
@@ -648,6 +650,7 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToS
                   Array.isArray(services) && services.map((service, idx) => (
                     <button
                       key={service?._id || idx}
+                      onMouseEnter={() => setHighlightedService(service)}
                       onClick={() => {
                         if (service) {
                           setSelectedService(service);
@@ -708,6 +711,8 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToS
                             key={`${highlightedService._id}-${idx}`}
                             src={src}
                             alt={`${highlightedService.title} sample ${idx + 1}`}
+                            loading="lazy"
+                            decoding="async"
                             className="h-20 w-24 object-cover rounded-xl border border-white/10"
                           />
                         );
@@ -1006,6 +1011,8 @@ function ServiceDetail({ NAVBAR_HEIGHT, selectedService, setCurrentPage }) {
                     <img
                       src={src}
                       alt={`Sample ${idx + 1}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -1110,9 +1117,9 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, setCurrentPage, scrollToS
                 key={heroProject._id}
                 custom={direction}
                 variants={{
-                  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 80 : -80, filter: "blur(10px)" }),
-                  center: { opacity: 1, x: 0, filter: "blur(0px)" },
-                  exit: (dir) => ({ opacity: 0, x: dir < 0 ? 80 : -80, filter: "blur(10px)" }),
+                  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 80 : -80 }),
+                  center: { opacity: 1, x: 0 },
+                  exit: (dir) => ({ opacity: 0, x: dir < 0 ? 80 : -80 }),
                 }}
                 initial="enter"
                 animate="center"
@@ -1313,7 +1320,6 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                       scale: 0.85,
                       rotateY: dir > 0 ? -25 : 25,
                       rotateZ: dir > 0 ? 3 : -3,
-                      filter: "blur(20px)",
                     }),
                     center: {
                       x: 0,
@@ -1322,7 +1328,6 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                       scale: 1,
                       rotateY: 0,
                       rotateZ: 0,
-                      filter: "blur(0px)",
                     },
                     exit: (dir) => ({
                       x: dir < 0 ? 300 : -300,
@@ -1331,7 +1336,6 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                       scale: 0.85,
                       rotateY: dir < 0 ? -25 : 25,
                       rotateZ: dir < 0 ? 3 : -3,
-                      filter: "blur(20px)",
                     }),
                   }}
                   initial="enter"
@@ -1406,6 +1410,8 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                     transition={{ duration: 0.6, delay: imgIdx * 0.1 }}
                     src={src}
                     alt={`Project ${imgIdx + 1}`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-64 object-cover rounded-2xl shadow-lg border border-white/10 backdrop-blur-sm"
                   />
                 );
@@ -1535,18 +1541,18 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
 // -------------------------
 function CinematicBackground() {
   // Bokeh Light Orbs variant (brand-consistent reds/magentas)
-  const orbs = Array.from({ length: 12 }).map((_, i) => ({
+  const orbs = Array.from({ length: 6 }).map((_, i) => ({
     id: i,
-    size: 240 + (i % 6) * 110, // 240–800px
+    size: 180 + (i % 6) * 80, // reduced sizes for perf
     x: (i * 83) % 100,
     y: (i * 47) % 100,
     hue: [
-      'rgba(255,58,58,0.16)',
-      'rgba(255,77,109,0.14)',
-      'rgba(217,39,98,0.12)'
+      'rgba(255,58,58,0.12)',
+      'rgba(255,77,109,0.10)',
+      'rgba(217,39,98,0.10)'
     ][i % 3],
     delay: (i % 7) * 1.5,
-    dur: 18 + (i % 5) * 6,
+    dur: 22 + (i % 5) * 8,
   }));
 
   return (
@@ -1558,7 +1564,7 @@ function CinematicBackground() {
       {orbs.map((o) => (
         <motion.div
           key={o.id}
-          className="absolute rounded-full blur-3xl"
+          className="absolute rounded-full blur-xl"
           style={{
             left: `${o.x}%`,
             top: `${o.y}%`,
@@ -1581,13 +1587,13 @@ function CinematicBackground() {
 
       {/* Gentle corner tints for depth */}
       <motion.div
-        className="absolute -left-40 -top-20 w-[800px] h-[800px] rounded-full blur-3xl"
+        className="absolute -left-40 -top-20 w-[600px] h-[600px] rounded-full blur-2xl"
         style={{ background: 'radial-gradient(circle at center, rgba(255,40,60,0.18), rgba(0,0,0,0) 70%)' }}
         animate={{ opacity: [0.12, 0.2, 0.14], scale: [1, 1.1, 1] }}
         transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute -right-40 bottom-0 w-[900px] h-[900px] rounded-full blur-3xl"
+        className="absolute -right-40 bottom-0 w-[700px] h-[700px] rounded-full blur-2xl"
         style={{ background: 'radial-gradient(circle at center, rgba(255,20,60,0.14), rgba(0,0,0,0) 70%)' }}
         animate={{ opacity: [0.1, 0.18, 0.12], scale: [1.05, 0.95, 1.05] }}
         transition={{ duration: 34, repeat: Infinity, ease: 'easeInOut' }}
@@ -1840,7 +1846,7 @@ useEffect(() => {
   // -------------------------
   return (
     <ErrorBoundary>
-    <div className="relative overflow-x-hidden">
+      <div className="relative overflow-x-hidden">
 
         <CinematicBackground />
 
@@ -1854,7 +1860,7 @@ useEffect(() => {
     setPendingScrollTarget={setPendingScrollTarget}
   />
 
-        <div key={currentPage} className="relative z-10">
+        <div className="relative z-10">
   {renderPage()}
 </div>
 

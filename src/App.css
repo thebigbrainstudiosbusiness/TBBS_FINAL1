@@ -40,7 +40,6 @@
    Layout & Reset
 ========================= */
 
-html,
 body,
 #root {
   width: 100%;
@@ -60,15 +59,7 @@ body {
   overflow-y: auto;
 }
 
-/* Prevent ALL inner scrollbars */
-body * {
-  scrollbar-width: none; /* Firefox */
-}
 
-body *::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
 
 /* =========================
    Typography
@@ -189,4 +180,12 @@ body {
 
 .read-the-docs {
   color: #888;
+}
+
+/* Disable backdrop-filter and blur on mobile for performance */
+@media (max-width: 768px) {
+  * {
+    backdrop-filter: none !important;
+    filter: none !important;
+  }
 }
