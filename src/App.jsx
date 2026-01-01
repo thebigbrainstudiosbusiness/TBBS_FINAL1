@@ -361,7 +361,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       {SHOW_HERO && (
 <section
   id="hero"
-  className="relative w-full overflow-hidden vh-fix flex items-center"
+  className="relative w-full overflow-hidden flex items-center min-h-[100dvh]"
 >
 
 
@@ -386,7 +386,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
 <div className="relative z-10 flex items-center justify-center h-full px-4 text-center">
 
 
-          <div>
+          <div className="mx-auto max-w-5xl">
             <h1 className="text-6xl md:text-8xl font-black">
               {homeHeroData?.headline || "Welcome to Big Brain Studios"}
             </h1>
@@ -751,19 +751,19 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToS
               {[
                 {
                   title: "Concept & Pre-Visualization",
-                  bullets: "• aligning brand strategy • storyboarding • styleframes"
+                  bullets: "• Aligning brand strategy • Storyboarding • Styleframes"
                 },
                 {
                   title: "3D & World Building",
-                  bullets: "• high-fidelity modeling • texturing • camera blocking"
+                  bullets: "• High-Fidelity Modeling • Texturing • Camera Blocking"
                 },
                 {
                   title: "Animation & Cinematography",
-                  bullets: "• motion design • lighting setup • fluid simulation"
+                  bullets: "• Motion Design • Lighting Setup • Fluid Simulation"
                 },
                 {
                   title: "Rendering & Post-Production",
-                  bullets: "• 4K rendering • compositing • color grading • final delivery"
+                  bullets: "• 4K Rendering • Compositing • Color Grading • Final Delivery"
                 }
               ].map((step, idx) => (
                 <div key={step.title} className="
@@ -1555,7 +1555,7 @@ function CinematicBackground() {
   }));
 
   return (
-    <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
+    <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden bg-black">
       {/* Base tinted gradient */}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, #000000 80%, #8b0000 100%)' }} />
 
@@ -1767,7 +1767,7 @@ useEffect(() => {
 }, [currentPage, pendingScrollTarget]);
 
 // Single source of truth: scroll to top on every page change
-useLayoutEffect(() => {
+useEffect(() => {
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
 }, [currentPage]);
