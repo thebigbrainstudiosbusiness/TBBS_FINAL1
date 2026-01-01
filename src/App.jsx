@@ -361,7 +361,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       {SHOW_HERO && (
 <section
   id="hero"
-  className="relative w-full overflow-hidden vh-fix"
+  className="relative w-full overflow-hidden vh-fix flex items-center"
 >
 
 
