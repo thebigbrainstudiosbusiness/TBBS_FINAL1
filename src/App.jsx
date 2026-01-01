@@ -361,8 +361,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       {SHOW_HERO && (
 <section
   id="hero"
-  className="relative w-full overflow-hidden"
-  style={{ height: "100vh" }}
+  className="relative w-full overflow-hidden vh-fix"
 >
 
 
@@ -429,58 +428,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
 {services && services.length > 0 ? (
   <div className="flex flex-col lg:flex-row gap-12 max-w-7xl mx-auto items-start">
 
-    {/* LEFT PREVIEW */}
-    <div className="lg:w-2/5">
-      <div className="relative sticky top-32 rounded-3xl overflow-hidden border border-white/15 bg-white/5 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={services[activeService]?.image || 'loading'}
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="relative h-80 md:h-96 overflow-hidden"
-          >
-          {safeImageUrl(services[activeService]?.image, { width: 1200, quality: 80 }) && (
-            <img
-              src={safeImageUrl(services[activeService]?.image, { width: 1200, quality: 80 })}
-              alt={services[activeService]?.title || 'Loading'}
-            />
-          )}
-
-            {/* Gradient overlay and inner highlight border */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
-            <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/10" />
-            {/* Top-left badge */}
-            <div className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-[0.35em] uppercase rounded-full bg-black/50 border border-white/10">
-              Preview
-            </div>
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="p-6 md:p-7">
-          <h3 className="heading-font text-2xl font-black text-white mb-2">
-            {services[activeService]?.title || 'Loading...'}
-          </h3>
-          <p className="text-gray-300 body-font mb-6">
-            {services[activeService]?.description || 'Loading...'}
-          </p>
-          <button
-            onClick={() => {
-              if (services[activeService]) {
-                setSelectedService(services[activeService]);
-                setCurrentPage("serviceDetail");
-              }
-            }}
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(239,68,68,0.25)]"
-          >
-            READ MORE →
-          </button>
-        </div>
-      </div>
-    </div>
-
-    {/* RIGHT SIDE LIST */}
+    {/* LEFT SIDE LIST */}
     <div className="lg:w-3/5 space-y-5">
       {services.map((s, i) => (
         <div
@@ -530,6 +478,57 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       >
         <span className="text-2xl">+</span> SEE ALL SERVICES
       </button>
+    </div>
+
+    {/* RIGHT PREVIEW */}
+    <div className="lg:w-2/5">
+      <div className="relative sticky top-32 rounded-3xl overflow-hidden border border-white/15 bg-white/5 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={services[activeService]?.image || 'loading'}
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative h-80 md:h-96 overflow-hidden"
+          >
+          {safeImageUrl(services[activeService]?.image, { width: 1200, quality: 80 }) && (
+            <img
+              src={safeImageUrl(services[activeService]?.image, { width: 1200, quality: 80 })}
+              alt={services[activeService]?.title || 'Loading'}
+            />
+          )}
+
+            {/* Gradient overlay and inner highlight border */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/10" />
+            {/* Top-left badge */}
+            <div className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-[0.35em] uppercase rounded-full bg-black/50 border border-white/10">
+              Preview
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        <div className="p-6 md:p-7">
+          <h3 className="heading-font text-2xl font-black text-white mb-2">
+            {services[activeService]?.title || 'Loading...'}
+          </h3>
+          <p className="text-gray-300 body-font mb-6">
+            {services[activeService]?.description || 'Loading...'}
+          </p>
+          <button
+            onClick={() => {
+              if (services[activeService]) {
+                setSelectedService(services[activeService]);
+                setCurrentPage("serviceDetail");
+              }
+            }}
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(239,68,68,0.25)]"
+          >
+            READ MORE →
+          </button>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -1556,7 +1555,7 @@ function CinematicBackground() {
   }));
 
   return (
-    <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden bg-black">
+    <div className="fixed inset-0 -z-50 pointer-events-none overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
       {/* Base tinted gradient */}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, #000000 80%, #8b0000 100%)' }} />
 
