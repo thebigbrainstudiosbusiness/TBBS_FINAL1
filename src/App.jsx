@@ -511,7 +511,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
                 onClick={() => scrollToSection("services-section")}
                 className="bg-red-600 px-8 py-3 rounded text-lg font-bold hover:bg-red-700 transition"
               >
-                {homeHeroData?.ctaText || "Explore Our Work"}
+                {homeHeroData?.ctaText || ""}
               </button>
             </div>
           </div>
