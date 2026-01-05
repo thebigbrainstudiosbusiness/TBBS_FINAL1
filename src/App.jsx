@@ -845,7 +845,7 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToS
             <div className="space-y-6 md:space-y-8 max-w-xl">
               {[
                 {
-                  title: "Concept & Pre-Visualization",
+                  title: "CoNcEpT & Pre-Visualization",
                   bullets: "• Aligning brand strategy • Storyboarding • Styleframes"
                 },
                 {
