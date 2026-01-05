@@ -23,6 +23,12 @@ body {
   overscroll-behavior-y: none;
 }
 
+html.home-page,
+body.home-page {
+  overscroll-behavior-y: auto;
+  overscroll-behavior: auto;
+}
+
 @supports (height: 100svh) {
   .vh-fix {
     min-height: 100svh;

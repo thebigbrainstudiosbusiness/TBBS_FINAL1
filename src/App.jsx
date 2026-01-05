@@ -1,5 +1,5 @@
 import { sanityClient, safeImageUrl } from './sanityClient';
-import React, { useState, useEffect, useMemo, useLayoutEffect } from "react";
+import React, { useState, useEffect, useMemo, useLayoutEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import "./App.css";
 
@@ -13,6 +13,29 @@ const isIOS = () => {
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
   );
 };
+
+// -------------------------
+// Home Background Video Component
+// -------------------------
+function HomeBackgroundVideo({ videoUrl }) {
+  if (!videoUrl) return null;
+
+  return (
+    <div className="absolute inset-0 -z-10">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+      >
+        <source src={videoUrl} type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-black/30" />
+    </div>
+  );
+}
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -85,7 +108,7 @@ return (
     <div
       className={`
         w-full h-full flex items-center justify-between px-6
-        rounded-3xl border backdrop-blur-2xl transition-all duration-300
+        rounded-3xl border backdrop-blur-sm transition-all duration-300
         ${
           scrolledPastHero
             ? "bg-white/10 border-white/20"
@@ -209,7 +232,6 @@ onClick={() => {
     )}
   </nav>
 );
-
 }
 
 // -------------------------
@@ -255,7 +277,7 @@ const handleSubmit = async (e) => {
 
         {/* Premium Glass Card */}
         <div className="relative">
-          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
+          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
             {/* subtle gradients and highlights */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5" />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_500px_at_10%_-20%,rgba(239,68,68,0.08),transparent)]" />
@@ -335,16 +357,6 @@ const handleSubmit = async (e) => {
             </div>
           </div>
         </div>
-
-        {/* Glow accents */}
-        <motion.div
-          aria-hidden
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2 }}
-          className="pointer-events-none absolute -inset-x-10 -bottom-10 h-24 bg-gradient-to-t from-red-600/20 via-pink-500/10 to-transparent blur-2xl"
-        />
       </div>
     </section>
   );
@@ -369,25 +381,10 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       {SHOW_HERO && (
 <section
   id="hero"
-  className="relative w-full overflow-hidden flex items-center min-h-[100dvh]"
+  className="relative w-full overflow-hidden flex items-center h-screen pb-24"
 >
 
-
-<video
-  preload="none"
-  poster="/hero-poster.jpg"
-  key={homeHeroData?.videoUrl}   // 👈 forces reload when URL changes
-  autoPlay
-  loop
-  muted
-  playsInline
-  className="absolute top-0 left-0 w-full h-full object-cover"
->
-  {homeHeroData?.videoUrl && (
-    <source src={homeHeroData.videoUrl} type="video/mp4" />
-  )}
-</video>
-
+<HomeBackgroundVideo videoUrl={homeHeroData?.videoUrl} />
 
         <div className="absolute inset-0 bg-black/30" />
 
@@ -456,18 +453,13 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
                   : "bg-white/20"
               } h-2 w-2 rounded-full transition-all`}
             />
-            <motion.h3
-              initial={false}
-              animate={{
-                color: i === activeService ? "#ffffff" : "#a1a1aa",
-                x: i === activeService ? 4 : 0,
-                scale: i === activeService ? 1.02 : 1,
-              }}
-              transition={{ duration: 0.25 }}
-              className="heading-font text-6xl md:text-7xl font-black"
+            <h3
+              className={`heading-font text-6xl md:text-7xl font-black transition-colors duration-300 ${
+                i === activeService ? "text-white" : "text-gray-600"
+              }`}
             >
               {s.title}
-            </motion.h3>
+            </h3>
           </div>
 
           <div
@@ -490,16 +482,8 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
 
     {/* RIGHT PREVIEW */}
     <div className="lg:w-2/5">
-      <div className="relative sticky top-32 rounded-3xl overflow-hidden border border-white/15 bg-white/5 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={services[activeService]?.image || 'loading'}
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="relative h-80 md:h-96 overflow-hidden"
-          >
+      <div className="relative sticky top-32 rounded-3xl overflow-hidden border border-white/15 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
+        <div className="relative h-80 md:h-96 overflow-hidden">
           {safeImageUrl(services[activeService]?.image, { width: 1200, quality: 80 }) && (
             <img
               src={safeImageUrl(services[activeService]?.image, { width: 1200, quality: 80 })}
@@ -507,15 +491,14 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
             />
           )}
 
-            {/* Gradient overlay and inner highlight border */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
-            <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/10" />
-            {/* Top-left badge */}
-            <div className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-[0.35em] uppercase rounded-full bg-black/50 border border-white/10">
-              Preview
-            </div>
-          </motion.div>
-        </AnimatePresence>
+          {/* Gradient overlay and inner highlight border */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/10" />
+          {/* Top-left badge */}
+          <div className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-[0.35em] uppercase rounded-full bg-black/50 border border-white/10">
+            Preview
+          </div>
+        </div>
 
         <div className="p-6 md:p-7">
           <h3 className="heading-font text-2xl font-black text-white mb-2">
