@@ -37,6 +37,108 @@ function HomeBackgroundVideo({ videoUrl }) {
   );
 }
 
+// -------------------------
+// Home Projects Section Component
+// -------------------------
+function HomeProjectsSection({ projects }) {
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  useEffect(() => {
+    if (projects.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setHeroIndex((i) => (i + 1) % projects.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [projects.length]);
+
+  const activeProject = projects[heroIndex];
+
+  return (
+    <section className="py-16 px-4 bg-transparent">
+      <div className="container mx-auto">
+        <div className="text-center mb-8">
+          <p className="text-red-500 text-xs tracking-[0.6em] font-semibold mb-4">OUR WORK</p>
+          <h2 className="heading-font clamp-heading-lg font-black text-white max-w-3xl mx-auto">
+            Featured Projects
+          </h2>
+          <p className="text-gray-300 body-font mt-3 max-w-2xl mx-auto">
+            Explore our latest creative work across animation, CGI, and campaigns.
+          </p>
+        </div>
+
+        <div className="relative max-w-6xl mx-auto">
+          <AnimatePresence mode="wait">
+            {activeProject && (
+              <motion.div
+                key={activeProject._id}
+                custom={direction}
+                variants={{
+                  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 80 : -80 }),
+                  center: { opacity: 1, x: 0 },
+                  exit: (dir) => ({ opacity: 0, x: dir < 0 ? 80 : -80 }),
+                }}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  duration: 0.65,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                  opacity: { duration: 0.65 },
+                  x: { duration: 0.65 },
+                  filter: { duration: 0.65 },
+                }}
+                className="rounded-3xl overflow-hidden border border-white/15 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+              >
+                <div className="relative h-[20rem] md:h-[24rem] overflow-hidden">
+                  {(() => {
+                    const src = safeImageUrl(activeProject.image, { width: 1200 });
+                    return src && (
+                      <motion.img
+                        src={src}
+                        className="w-full h-full object-cover"
+                      />
+                    );
+                  })()}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute left-6 bottom-6 right-6 p-6 md:p-8 flex flex-col justify-between">
+                    <div>
+                      <div className="text-xs uppercase tracking-widest text-red-300 font-semibold mb-1">
+                        {activeProject.category || "Featured"}
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-black mb-1">{activeProject.title}</h3>
+                      <p className="text-gray-300 max-w-xl line-clamp-2">{activeProject.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-6xl mx-auto">
+          {activeProject?.images?.[0] && (
+            <img
+              src={safeImageUrl(activeProject.images[0], { width: 800 })}
+              alt={`${activeProject.title} sample 1`}
+              className="w-full h-80 object-cover rounded-xl border border-white/10"
+            />
+          )}
+          {activeProject?.images?.[1] && (
+            <img
+              src={safeImageUrl(activeProject.images[1], { width: 800 })}
+              alt={`${activeProject.title} sample 2`}
+              className="w-full h-80 object-cover rounded-xl border border-white/10"
+            />
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -368,7 +470,7 @@ const handleSubmit = async (e) => {
 // -------------------------
 // HOME (hoisted)
 // -------------------------
-function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPage, services, aboutData, homeHeroData, contactData }) {
+function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPage, services, projects, aboutData, homeHeroData, contactData }) {
 
   const [activeService, setActiveService] = useState(0);
 
@@ -534,6 +636,8 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
             
         </div>
       </section>
+
+      <HomeProjectsSection projects={projects} />
 
       {/* About */}
       <section id="about" className="bg-transparent text-white py-20">
@@ -1853,16 +1957,19 @@ useEffect(() => {
         );
       default:
         return (
-          <Home
-            NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-            scrollToSection={scrollToSection}
-            setSelectedService={setSelectedService}
-            setCurrentPage={setCurrentPage}
-            services={services}
-            aboutData={aboutData}
-            homeHeroData={homeHeroData}
-            contactData={contactData}
-          />
+<Home
+  NAVBAR_HEIGHT={NAVBAR_HEIGHT}
+  scrollToSection={scrollToSection}
+  setSelectedService={setSelectedService}
+  setCurrentPage={setCurrentPage}
+  services={services}
+  projects={projects}
+  aboutData={aboutData}
+  homeHeroData={homeHeroData}
+  contactData={contactData}
+/>
+
+
         );
     }
   };
