@@ -153,6 +153,12 @@ body {
   scrollbar-color: rgba(239, 68, 68, 0.9) rgba(0, 0, 0, 0.2);
 }
 
+@supports (-webkit-touch-callout: none) {
+  body.home-page {
+    overscroll-behavior-y: auto;
+  }
+}
+
 /* =========================
    Legacy / Template Styles
 ========================= */
@@ -189,4 +195,55 @@ body {
 
 .read-the-docs {
   color: #888;
+}
+/* ======================================================
+   iOS Safari Compatibility Layer (ADD ONLY – NO REMOVALS)
+   ====================================================== */
+@supports (-webkit-touch-callout: none) {
+
+  /* ----------------------------------
+     Restore native momentum scrolling
+     ---------------------------------- */
+  html,
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ----------------------------------
+     iOS does not support custom scrollbars
+     Reset scrollbar overrides safely
+     ---------------------------------- */
+  body {
+    scrollbar-width: auto; /* Firefox fallback, harmless on iOS */
+  }
+
+  body::-webkit-scrollbar {
+    width: auto;
+    height: auto;
+  }
+
+  /* ----------------------------------
+     Prevent Safari from creating
+     phantom inner scroll containers
+     ---------------------------------- */
+  #root {
+    height: auto;
+    min-height: auto;
+  }
+
+  /* ----------------------------------
+     Ensure sections never become
+     accidental scroll containers
+     ---------------------------------- */
+  section {
+    overflow-anchor: none;
+  }
+
+  /* ----------------------------------
+     Reduce scroll-jank from transforms
+     (Safari-specific rendering quirk)
+     ---------------------------------- */
+  * {
+    -webkit-transform: translateZ(0);
+  }
 }

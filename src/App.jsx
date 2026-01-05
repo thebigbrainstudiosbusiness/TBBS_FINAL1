@@ -6,6 +6,14 @@ import "./App.css";
 import emailjs from "@emailjs/browser";
 import ProjectGrid from './components/ProjectGrid';
 
+const isIOS = () => {
+  if (typeof navigator === "undefined") return false;
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+};
+
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -1739,25 +1747,53 @@ useEffect(() => {
 
 
 
-  const scrollToSection = (id, retries = 10) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const y = window.scrollY + el.getBoundingClientRect().top - NAVBAR_HEIGHT + 8;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    } else if (retries > 0) {
+const scrollToSection = (id, retries = 10) => {
+  const el = document.getElementById(id);
+
+  if (!el) {
+    if (retries > 0) {
       setTimeout(() => scrollToSection(id, retries - 1), 100);
     }
-  };
+    return;
+  }
 
-  const nativeScrollToSection = (id) => {
-  document.getElementById(id)?.scrollIntoView({
+  // 🍎 iOS Safari: native, non-smooth
+  if (isIOS()) {
+    el.scrollIntoView({ block: "start" });
+    return;
+  }
+
+  // Existing behavior (UNCHANGED for others)
+  const y =
+    window.scrollY +
+    el.getBoundingClientRect().top -
+    NAVBAR_HEIGHT +
+    8;
+
+  window.scrollTo({ top: y, behavior: "smooth" });
+};
+
+
+const nativeScrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  if (isIOS()) {
+    el.scrollIntoView({ block: "start" });
+    return;
+  }
+
+  el.scrollIntoView({
     behavior: "smooth",
     block: "start",
   });
 };
 
 
+
 useEffect(() => {
+  if (isIOS()) return; // 🍎 iOS: skip deferred scroll
+
   if (currentPage === "home" && pendingScrollTarget) {
     requestAnimationFrame(() => {
       nativeScrollToSection(pendingScrollTarget);
@@ -1766,11 +1802,19 @@ useEffect(() => {
   }
 }, [currentPage, pendingScrollTarget]);
 
+
 // Single source of truth: scroll to top on every page change
 useEffect(() => {
+  if (isIOS()) {
+    // iOS: let Safari manage position naturally
+    window.scrollTo(0, 0);
+    return;
+  }
+
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
 }, [currentPage]);
+
 
 // Disable browser scroll restoration so it doesn't restore previous positions
 useEffect(() => {
