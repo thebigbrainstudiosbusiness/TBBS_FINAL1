@@ -60,7 +60,7 @@ function HomeProjectsSection({ projects }) {
     <section className="py-16 px-4 bg-transparent">
       <div className="container mx-auto">
         <div className="text-center mb-8">
-          <p className="text-red-500 text-xs tracking-[0.6em] font-semibold mb-4">OUR WORK</p>
+          <p className="text-red-500 text-xs tracking-[0.3em] md:tracking-[0.6em] font-semibold mb-4">OUR WORK</p>
           <h2 className="heading-font clamp-heading-lg font-black text-white max-w-3xl mx-auto">
             Featured Projects
           </h2>
@@ -293,7 +293,7 @@ return (
 
     {/* MOBILE MENU */}
     {mobileOpen && (
-      <div className="md:hidden absolute top-full left-0 w-full mt-4 rounded-2xl bg-black/90 backdrop-blur-xl border border-white/10 p-6 space-y-6 text-center">
+      <div className="md:hidden absolute top-full left-0 w-full mt-4 rounded-2xl bg-black/90 md:backdrop-blur-xl border border-white/10 p-6 space-y-6 text-center">
         {["Home", "About", "Services", "Projects"].map((label) => (
           <button
             key={label}
@@ -372,7 +372,7 @@ const handleSubmit = async (e) => {
     <section aria-labelledby="contact-heading" className="px-4">
       <div className="max-w-6xl mx-auto relative">
         <div className="text-center mb-10">
-          <p className="text-red-500 text-xs tracking-[0.6em] font-semibold mb-3">{contactData?.subtitle || "GET IN TOUCH"}</p>
+          <p className="text-red-500 text-xs tracking-[0.3em] md:tracking-[0.6em] font-semibold mb-3">{contactData?.subtitle || "GET IN TOUCH"}</p>
           <h2 id="contact-heading" className="heading-font clamp-heading-lg font-black">{contactData?.title || "Contact Us"}</h2>
           <p className="text-gray-300 body-font mt-3">{contactData?.description || "We typically respond within one business day."}</p>
         </div>
@@ -483,7 +483,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       {SHOW_HERO && (
 <section
   id="hero"
-  className="relative w-full overflow-hidden h-screen pb-24"
+  className="relative w-full overflow-hidden min-h-[100svh] pb-24"
 >
 
 <HomeBackgroundVideo videoUrl={homeHeroData?.videoUrl} />
@@ -498,7 +498,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
           text-left
           max-w-3xl
         ">
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight whitespace-nowrap">
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight whitespace-normal md:whitespace-nowrap">
             {homeHeroData?.headline || "THE BIGBRAIN STUDIOS"}
           </h1>
 
@@ -1215,7 +1215,7 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, setCurrentPage, scrollToS
                   x: { duration: 0.65 },
                   filter: { duration: 0.65 },
                 }}
-                className="rounded-3xl overflow-hidden border-2 border-white/10 bg-gradient-to-b from-white/8 to-white/4 shadow-2xl backdrop-blur-xl"
+                className="rounded-3xl overflow-hidden border-2 border-white/10 bg-gradient-to-b from-white/8 to-white/4 shadow-2xl md:backdrop-blur-xl"
               >
                 {/* Glass background layers */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/6 via-white/2 to-transparent pointer-events-none" />
