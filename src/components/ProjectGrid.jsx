@@ -23,10 +23,10 @@ const ProjectGrid = React.memo(function ProjectGrid({
             delay: idx * 0.05,
             ease: "easeOut",
           }}
-          className="group relative rounded-3xl border border-white/10 bg-gradient-to-br from-black/60 via-black/40 to-black/80 overflow-hidden backdrop-blur cursor-pointer transition-all duration-300 hover:border-red-500/50"
+          className="group relative rounded-3xl border border-white/10 bg-gradient-to-br from-black/60 via-black/40 to-black/80 overflow-hidden backdrop-blur cursor-pointer transition-all duration-300 hover:border-red-500/50 flex flex-col"
           onClick={() => onProjectClick(project)}
         >
-          <div className="relative h-56 overflow-hidden">
+          <div className="relative h-48 md:h-56 overflow-hidden flex-shrink-0">
             {(() => {
               const imgSrc = safeImageUrl(project.image, { width: 1600 });
               return imgSrc && (
@@ -43,34 +43,36 @@ const ProjectGrid = React.memo(function ProjectGrid({
             </div>
           </div>
 
-          <div className="p-6 space-y-4">
-            <div className="flex items-center justify-between gap-4">
-              <h3 className="text-2xl font-black">{project.title}</h3>
-              <span className="text-sm text-gray-400">{project.duration}</span>
+          <div className="p-6 flex flex-col flex-grow">
+            <div className="space-y-4 flex-grow">
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="text-xl md:text-2xl font-black">{project.title}</h3>
+                <span className="text-sm text-gray-400">{project.duration}</span>
+              </div>
+
+              <p className="text-gray-300 line-clamp-2">{project.description}</p>
+
+              <div className="flex items-center justify-between text-sm text-gray-400">
+                <span>Shots: {project.shots}</span>
+                <span>Passes: {2 + (idx % 3)}</span>
+              </div>
+
+              <div className="flex gap-3">
+                {project.images?.slice(0, 3).map((img, imgIdx) => {
+                  const src = safeImageUrl(img, { width: 500 });
+                  return src && (
+                    <img
+                      key={`${project._id}-${imgIdx}`}
+                      src={src}
+                      alt={`${project.title} frame ${imgIdx + 1}`}
+                      className="h-14 w-16 object-cover rounded-xl border border-white/10"
+                    />
+                  );
+                })}
+              </div>
             </div>
 
-            <p className="text-gray-300 line-clamp-2">{project.description}</p>
-
-            <div className="flex items-center justify-between text-sm text-gray-400">
-              <span>Shots: {project.shots}</span>
-              <span>Passes: {2 + (idx % 3)}</span>
-            </div>
-
-            <div className="flex gap-3">
-              {project.images?.slice(0, 3).map((img, imgIdx) => {
-                const src = safeImageUrl(img, { width: 500 });
-                return src && (
-                  <img
-                    key={`${project._id}-${imgIdx}`}
-                    src={src}
-                    alt={`${project.title} frame ${imgIdx + 1}`}
-                    className="h-14 w-16 object-cover rounded-xl border border-white/10"
-                  />
-                );
-              })}
-            </div>
-
-            <button className="w-full mt-2 px-4 py-3 border border-white/20 rounded-full text-sm font-semibold transition hover:bg-white/10">
+            <button className="w-full mt-4 px-4 py-3 border border-white/20 rounded-full text-sm font-semibold transition hover:bg-white/10">
               Open case study →
             </button>
           </div>
