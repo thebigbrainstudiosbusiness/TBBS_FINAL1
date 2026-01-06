@@ -1390,7 +1390,7 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-10 items-start">
           {/* LEFT: hero, description, images, video */}
-          <div>
+          <div className="order-2 lg:order-1">
             <AnimatePresence mode="wait">
               {project && (
                 <motion.div
@@ -1511,14 +1511,7 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
               </motion.div>
             )}
 
-            <section id="contact-section-project-detail">
-              <ContactSection formId="contact-form-project-detail" />
-            </section>
-          </div>
-
-          {/* RIGHT SIDEBAR */}
-          <aside className="sticky top-[120px]">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="relative rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="relative rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl mb-12">
               <div className="absolute inset-0 bg-gradient-to-br from-white/8 to-white/4 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-tr from-red-500/5 via-transparent to-purple-500/5 pointer-events-none" />
               <div className="absolute inset-0 rounded-2xl border border-white/10 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] pointer-events-none" />
@@ -1575,7 +1568,15 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                     </motion.div>
                   ))}
                 </div>
+              </div>
+            </motion.div>
 
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="relative rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl mb-12">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/8 to-white/4 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-red-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+              <div className="absolute inset-0 rounded-2xl border border-white/10 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] pointer-events-none" />
+
+              <div className="relative p-6 md:p-8 space-y-6">
                 <div className="pt-4 border-t border-white/10">
                   <div className="text-xs uppercase tracking-widest text-gray-400 mb-4 font-semibold">Featured projects</div>
                   <div className="grid grid-cols-1 gap-2">
@@ -1613,6 +1614,15 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                 </div>
               </div>
             </motion.div>
+
+            <section id="contact-section-project-detail">
+              <ContactSection formId="contact-form-project-detail" />
+            </section>
+          </div>
+
+          {/* RIGHT SIDEBAR */}
+          <aside className="order-1 lg:order-2 sticky top-[120px]">
+            {/* Sidebar content removed - project progress now in main content */}
           </aside>
         </div>
       </div>
