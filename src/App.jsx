@@ -449,9 +449,9 @@ const handleSubmit = async (e) => {
                   />
                 </div>
 
-                <div className="mt-6 flex items-center justify-between gap-4">
-                  <p className="text-xs text-gray-400 body-font">{contactData?.termsText || "By sending, you agree to our terms and privacy policy."}</p>
-                  <button type="submit" disabled={submitting} className="inline-flex items-center justify-center whitespace-nowrap px-8 md:px-10 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold text-white hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed transition shadow-[0_10px_30px_rgba(239,68,68,0.25)]">
+                <div className="mt-6 responsive-cta-row">
+                  <p className="text-xs text-gray-400 body-font text-center md:text-left">{contactData?.termsText || "By sending, you agree to our terms and privacy policy."}</p>
+                  <button type="submit" disabled={submitting} className="w-full md:w-auto inline-flex items-center justify-center whitespace-nowrap px-8 md:px-10 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold text-white hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed transition shadow-[0_10px_30px_rgba(239,68,68,0.25)]">
                     {submitting ? 'Sending…' : (contactData?.submitButtonText || 'Send message')}
                   </button>
                 </div>
@@ -1332,16 +1332,16 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, setCurrentPage, scrollToS
           }}
         />
 
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-10 responsive-cta-row">
           <div>
-            <p className="text-xs uppercase tracking-[0.5em] text-gray-400 mb-3">COLLAB MODE</p>
+            <p className="text-xs uppercase tracking-[0.3em] md:tracking-[0.5em] text-gray-400 mb-3">COLLAB MODE</p>
             <h3 className="text-3xl font-black mb-3">Need something custom?</h3>
             <p className="text-gray-300 max-w-2xl">
              Share the brief. We’ll plug in fast and take it from there.
-    
+
             </p>
           </div>
-          <button onClick={() => scrollToSection("contact-section-projects")} className="px-6 py-3 bg-red-600 rounded-full font-semibold hover:bg-red-500 transition">
+          <button onClick={() => scrollToSection("contact-section-projects")} className="w-full md:w-auto px-6 py-3 bg-red-600 rounded-full font-semibold hover:bg-red-500 transition">
             Start a project →
           </button>
         </div>
