@@ -483,38 +483,28 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       {SHOW_HERO && (
 <section
   id="hero"
-  className="relative w-full overflow-hidden flex items-center h-screen pb-24"
+  className="relative w-full overflow-hidden h-screen pb-24"
 >
 
 <HomeBackgroundVideo videoUrl={homeHeroData?.videoUrl} />
 
         <div className="absolute inset-0 bg-black/30" />
 
-<div className="relative z-10 flex items-center justify-center h-full px-4 text-center">
+        <div className="
+          absolute
+          bottom-20 md:bottom-28
+          left-6 md:left-16
+          z-10
+          text-left
+          max-w-3xl
+        ">
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight whitespace-nowrap">
+            {homeHeroData?.headline || "THE BIGBRAIN STUDIOS"}
+          </h1>
 
-
-          <div className="mx-auto max-w-5xl">
-            <h1 className="text-6xl md:text-8xl font-black">
-              {homeHeroData?.headline || "Welcome to Big Brain Studios"}
-            </h1>
-
-            <p className="text-2xl mt-6 font-light">{homeHeroData?.subheadline || "Your Premier Animation Partner"}</p>
-
-            <div className="h-1 w-32 bg-red-600 mx-auto my-8" />
-
-            <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto">
-              We bring imagination to life through cutting-edge animation, CGI, and creative campaigns.
-            </p>
-
-            <div className="mt-10">
-              <button
-                onClick={() => scrollToSection("services-section")}
-                className="bg-red-600 px-8 py-3 rounded text-lg font-bold hover:bg-red-700 transition"
-              >
-                {homeHeroData?.ctaText || ""}
-              </button>
-            </div>
-          </div>
+          <p className="mt-4 text-lg md:text-xl text-gray-300 font-medium tracking-wide">
+            {homeHeroData?.subheadline || "Your Premier Animation Partner"}
+          </p>
         </div>
       </section>
       )}

@@ -22,7 +22,8 @@
 ========================= */
 
 :root {
-  --font-heading: 'Conthrax', 'Eurostile', 'Bank Gothic', 'Microgramma', system-ui, sans-serif;
+  --font-heading: 'Unbounded', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
   --font-body: 'Unbounded', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
                'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 
