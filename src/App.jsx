@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, Routes, Route, useParams } from "react-router-dom";
+import { useNavigate, useLocation, Routes, Route, useParams, Link } from "react-router-dom";
 import { sanityClient, safeImageUrl } from './sanityClient';
 import React, { useState, useEffect, useMemo, useLayoutEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -198,7 +198,6 @@ function Navbar({
   location
 }) {
 
-  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
 
@@ -229,59 +228,65 @@ return (
 
       {/* DESKTOP MENU */}
       <div className="hidden md:flex items-center space-x-8 font-medium">
-        <button
-          onClick={() => {
-            if (location.pathname === "/") nativeScrollToSection("hero");
-            else {
+        <Link
+          to="/"
+          onClick={(e) => {
+            if (location.pathname === "/") {
+              e.preventDefault();
+              nativeScrollToSection("hero");
+            } else {
               setPendingScrollTarget("hero");
-              navigate("/");
             }
           }}
           className="hover:text-red-500 transition"
         >
           Home
-        </button>
+        </Link>
 
-        <button
-          onClick={() => {
-            if (location.pathname === "/") nativeScrollToSection("about");
-            else {
+        <Link
+          to="/"
+          onClick={(e) => {
+            if (location.pathname === "/") {
+              e.preventDefault();
+              nativeScrollToSection("about");
+            } else {
               setPendingScrollTarget("about");
-              navigate("/");
             }
           }}
           className="hover:text-red-500 transition"
         >
           About
-        </button>
+        </Link>
 
-<button
-  onClick={() => navigate("/services")}
+<Link
+  to="/services"
   className="hover:text-red-500 transition"
 >
   Services
-</button>
+</Link>
 
-<button
-  onClick={() => navigate("/projects")}
+<Link
+  to="/projects"
   className="hover:text-red-500 transition"
 >
   Projects
-</button>
+</Link>
 
 
-        <button
-          onClick={() => {
-            if (location.pathname === "/") nativeScrollToSection("contact-home");
-            else {
+        <Link
+          to="/"
+          onClick={(e) => {
+            if (location.pathname === "/") {
+              e.preventDefault();
+              nativeScrollToSection("contact-home");
+            } else {
               setPendingScrollTarget("contact-home");
-              navigate("/");
             }
           }}
           className="px-5 py-2 rounded-xl bg-red-600 text-white hover:bg-red-500 transition"
         >
           Contact
-        </button>
+        </Link>
       </div>
 
       {/* MOBILE HAMBURGER */}
@@ -298,55 +303,55 @@ return (
     {mobileOpen && (
       <div className="md:hidden absolute top-full left-0 w-full mt-4 rounded-2xl bg-black/90 md:backdrop-blur-xl border border-white/10 p-6 space-y-6 text-center">
         {["Home", "About", "Services", "Projects"].map((label) => (
-          <button
+          <Link
             key={label}
+            to={label === "Home" || label === "About" ? "/" : `/${label.toLowerCase()}`}
             className="block w-full text-lg font-semibold hover:text-red-500 transition"
-onClick={() => {
-  setMobileOpen(false);
+            onClick={(e) => {
+              setMobileOpen(false);
 
-  if (label === "Home") {
-    if (location.pathname === "/") nativeScrollToSection("hero");
-    else {
-      setPendingScrollTarget("hero");
-      navigate("/");
-    }
-  }
+              if (label === "Home") {
+                if (location.pathname === "/") {
+                  e.preventDefault();
+                  nativeScrollToSection("hero");
+                } else {
+                  setPendingScrollTarget("hero");
+                }
+              }
 
-  if (label === "Services") {
-    navigate("/services");
-  }
+              if (label === "Services" || label === "Projects") {
+                // Navigation handled by Link
+              }
 
-  if (label === "Projects") {
-    navigate("/projects");
-  }
-
-  if (label === "About") {
-    if (location.pathname === "/") nativeScrollToSection("about");
-    else {
-      setPendingScrollTarget("about");
-      navigate("/");
-    }
-  }
-}}
-
+              if (label === "About") {
+                if (location.pathname === "/") {
+                  e.preventDefault();
+                  nativeScrollToSection("about");
+                } else {
+                  setPendingScrollTarget("about");
+                }
+              }
+            }}
           >
             {label}
-          </button>
+          </Link>
         ))}
 
-        <button
-          className="w-full bg-red-600 py-3 rounded-xl font-bold"
-          onClick={() => {
+        <Link
+          to="/"
+          className="block w-full bg-red-600 py-3 rounded-xl font-bold"
+          onClick={(e) => {
             setMobileOpen(false);
-            if (location.pathname === "/") nativeScrollToSection("contact-home");
-            else {
+            if (location.pathname === "/") {
+              e.preventDefault();
+              nativeScrollToSection("contact-home");
+            } else {
               setPendingScrollTarget("contact-home");
-              navigate("/");
             }
           }}
         >
           Contact
-        </button>
+        </Link>
       </div>
     )}
   </nav>
@@ -487,7 +492,7 @@ const handleSubmit = async (e) => {
 // -------------------------
 // HOME (hoisted)
 // -------------------------
-function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, services, projects, aboutData, homeHeroData, contactData }) {
+function Home({ NAVBAR_HEIGHT, scrollToSection, services, projects, aboutData, homeHeroData, contactData }) {
   const navigate = useNavigate();
 
   const [activeService, setActiveService] = useState(0);
@@ -546,47 +551,50 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, services, pr
     {/* LEFT SIDE LIST */}
     <div className="lg:w-3/5 space-y-5">
       {services.map((s, i) => (
-        <div
+        <motion.div
           key={s._id}
+          whileHover={{ scale: 1.03 }}
           onMouseEnter={() => setActiveService(i)}
-          onClick={() => {
-            navigate("/services/" + s._id);
-          }}
           className="group cursor-pointer rounded-xl px-2 py-4 md:py-5 transition-colors duration-300 hover:bg-white/[0.04]"
         >
-          <div className="flex items-center gap-3">
-            <span
-              className={`${
-                i === activeService
-                  ? "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.7)]"
-                  : "bg-white/20"
-              } h-2 w-2 rounded-full transition-all`}
-            />
-            <h3
-              className={`heading-font text-6xl md:text-7xl font-black transition-colors duration-300 ${
-                i === activeService ? "text-white" : "text-gray-600"
-              }`}
-            >
-              {s.title}
-            </h3>
-          </div>
+          <Link
+            to={`/services/${s._id}`}
+            className="block"
+          >
+            <div className="flex items-center gap-3">
+              <span
+                className={`${
+                  i === activeService
+                    ? "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.7)]"
+                    : "bg-white/20"
+                } h-2 w-2 rounded-full transition-all`}
+              />
+              <h3
+                className={`heading-font text-6xl md:text-7xl font-black transition-colors duration-300 ${
+                  i === activeService ? "text-white" : "text-gray-600"
+                }`}
+              >
+                {s.title}
+              </h3>
+            </div>
 
-          <div
-            className={`mt-2 h-px bg-gradient-to-r from-red-600/80 via-red-500/40 to-transparent ${
-              i === activeService
-                ? "opacity-100"
-                : "opacity-50 group-hover:opacity-80"
-            }`}
-          />
-        </div>
+            <div
+              className={`mt-2 h-px bg-gradient-to-r from-red-600/80 via-red-500/40 to-transparent ${
+                i === activeService
+                  ? "opacity-100"
+                  : "opacity-50 group-hover:opacity-80"
+              }`}
+            />
+          </Link>
+        </motion.div>
       ))}
 
-      <button
-        onClick={() => navigate("/services")}
+      <Link
+        to="/services"
         className="text-white flex items-center gap-2 mt-4 hover:text-red-500 transition-colors font-semibold"
       >
         <span className="text-2xl">+</span> SEE ALL SERVICES
-      </button>
+      </Link>
     </div>
 
     {/* RIGHT PREVIEW */}
@@ -616,16 +624,12 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, services, pr
           <p className="text-gray-300 body-font mb-6">
             {services[activeService]?.description || 'Loading...'}
           </p>
-          <button
-            onClick={() => {
-              if (services[activeService]) {
-                navigate("/services/" + services[activeService]._id);
-              }
-            }}
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(239,68,68,0.25)]"
+          <Link
+            to={`/services/${services[activeService]?._id}`}
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(239,68,68,0.25)] inline-block"
           >
             READ MORE →
-          </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -680,7 +684,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, services, pr
 // -------------------------
 // SERVICES PAGE (hoisted)
 // -------------------------
-function Services({ NAVBAR_HEIGHT, setSelectedService, scrollToSection, services, contactData }) {
+function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
   const navigate = useNavigate();
 
   const [highlightedService, setHighlightedService] = useState(services?.[0] || null);
@@ -749,22 +753,23 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, scrollToSection, services
                   </p>
                 ) : (
                   Array.isArray(services) && services.map((service, idx) => (
-                    <button
+                    <motion.div
                       key={service?._id || idx}
+                      whileHover={{ scale: 1.03 }}
                       onMouseEnter={() => setHighlightedService(service)}
-                      onClick={() => {
-                        if (service) {
-                          navigate("/services/" + service._id);
-                        }
-                      }}
                       className="text-left rounded-2xl bg-white/5 border border-white/10 px-5 py-6 transition-all duration-300 hover:border-red-500/50 hover:bg-white/10 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)] hover:shadow-[0_10px_40px_rgba(239,68,68,0.15)]"
                     >
-                      <p className="text-xs uppercase tracking-[0.5em] text-gray-400 mb-3">
-                        0{idx + 1}
-                      </p>
-                      <h3 className="text-2xl font-bold mb-3">{service?.title || 'Loading...'}</h3>
-                      <p className="text-gray-300 text-sm">{service?.description || 'Loading...'}</p>
-                    </button>
+                      <Link
+                        to={`/services/${service?._id}`}
+                        className="block"
+                      >
+                        <p className="text-xs uppercase tracking-[0.5em] text-gray-400 mb-3">
+                          0{idx + 1}
+                        </p>
+                        <h3 className="text-2xl font-bold mb-3">{service?.title || 'Loading...'}</h3>
+                        <p className="text-gray-300 text-sm">{service?.description || 'Loading...'}</p>
+                      </Link>
+                    </motion.div>
                   ))
                 )}
               </div>
@@ -819,14 +824,12 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, scrollToSection, services
                       })}
                     </div>
 
-                    <button
-                      onClick={() => {
-                        navigate("/services/" + highlightedService._id);
-                      }}
+                    <Link
+                      to={`/services/${highlightedService._id}`}
                       className="mt-4 inline-flex items-center gap-3 px-5 py-3 bg-red-600 hover:bg-red-500 rounded-full text-sm font-semibold transition-colors"
                     >
                       Schedule a sprint →
-                    </button>
+                    </Link>
                   </div>
                 </motion.div>
               )}
@@ -996,7 +999,7 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, scrollToSection, services
 // -------------------------
 // SERVICE DETAIL (hoisted)
 // -------------------------
-function ServiceDetail({ NAVBAR_HEIGHT, selectedService, services }) {
+function ServiceDetail({ NAVBAR_HEIGHT, services }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const service = services?.find((s) => s._id === id);
@@ -1014,12 +1017,12 @@ function ServiceDetail({ NAVBAR_HEIGHT, selectedService, services }) {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <button
-            onClick={() => navigate("/services")}
+          <Link
+            to="/services"
             className="inline-flex items-center gap-3 px-6 py-3 bg-white/10 border border-white/15 rounded-full text-gray-200 hover:bg-white/20 transition backdrop-blur"
           >
             <span>←</span> Back to Services
-          </button>
+          </Link>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-20">
@@ -1151,7 +1154,7 @@ const accentGradients = [
   "from-sky-500/40 via-cyan-500/20 to-transparent",
 ];
 
-function Projects({ NAVBAR_HEIGHT, setSelectedProject, scrollToSection, projects, contactData }) {
+function Projects({ NAVBAR_HEIGHT, scrollToSection, projects, contactData }) {
   const navigate = useNavigate();
 
   const processedProjects = useMemo(
@@ -1286,16 +1289,18 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, scrollToSection, projects
                       <p className="text-gray-300 max-w-2xl line-clamp-2">{heroProject.description}</p>
                     </div>
                     <div className="flex items-center gap-3 mt-4 md:mt-0">
-                      <motion.button
+                      <motion.div
                         whileHover={{ scale: 1.03, boxShadow: "0 12px 40px rgba(239,68,68,0.18)" }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => {
-                          navigate("/projects/" + heroProject._id);
-                        }}
-                        className="px-6 py-3 bg-gradient-to-r from-red-700 via-red-600 to-red-500 rounded-full font-semibold hover:brightness-105 transition shadow-lg"
+                        className="px-6 py-3 bg-gradient-to-r from-red-700 via-red-600 to-red-500 rounded-full font-semibold hover:brightness-105 transition shadow-lg inline-block"
                       >
-                        View hero case →
-                      </motion.button>
+                        <Link
+                          to={`/projects/${heroProject._id}`}
+                          className="block"
+                        >
+                          View hero case →
+                        </Link>
+                      </motion.div>
                       <motion.button
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.98 }}
@@ -1381,16 +1386,15 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, scrollToSection, projects
 // -------------------------
 // PROJECT DETAIL (hoisted)
 // -------------------------
-function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, projects }) {
+function ProjectDetail({ NAVBAR_HEIGHT, projects }) {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [direction, setDirection] = useState(0);
   const project = projects?.find((p) => p._id === id);
 
   if (!project) {
     return <div className="text-center text-gray-400 py-20">Project not found</div>;
   }
-
-  const [direction, setDirection] = useState(0);
 
   const idx = Math.max(0, projects.findIndex((p) => p._id === project._id));
   const tagOptions = ["All", "Cinematic", "CGI", "Campaigns", "Experiential", "Realtime"];
@@ -1407,9 +1411,9 @@ const goToProject = (newProject) => {
   return (
     <div className="bg-transparent text-white" style={{ paddingTop: NAVBAR_HEIGHT }}>
       <div className="container mx-auto px-4 py-12">
-        <button onClick={() => navigate("/projects")} className="mb-8 px-6 py-3 bg-red-600 text-white rounded-full font-semibold hover:bg-red-500 transition">
+        <Link to="/projects" className="mb-8 px-6 py-3 bg-red-600 text-white rounded-full font-semibold hover:bg-red-500 transition inline-block">
           ← Back to Projects
-        </button>
+        </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-10 items-start">
           {/* LEFT: hero, description, images, video */}
@@ -1607,19 +1611,22 @@ const goToProject = (newProject) => {
                   <div className="text-xs uppercase tracking-widest text-gray-400 mb-4 font-semibold">Featured projects</div>
                   <div className="grid grid-cols-1 gap-2">
                     {projects.slice(0, 6).map((p) => (
-                      <motion.button
+                      <motion.div
                         key={p._id}
                         whileHover={{ scale: 1.02, x: 4 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => goToProject(p)}
-                        className={`w-full text-left px-4 py-3 rounded-lg text-sm transition backdrop-blur-sm border ${
-                          p._id === project._id
-                            ? "bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white border-red-400 shadow-[0_8px_20px_rgba(239,68,68,0.2)]"
-                            : "bg-white/6 text-gray-300 hover:bg-white/8 border-white/10"
-                        }`}
+                        className="w-full"
                       >
-                        {p.title}
-                      </motion.button>
+                        <Link
+                          to={`/projects/${p._id}`}
+                          className={`block w-full px-4 py-3 rounded-lg text-sm transition backdrop-blur-sm border ${
+                            p._id === project._id
+                              ? "bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white border-red-400 shadow-[0_8px_20px_rgba(239,68,68,0.2)]"
+                              : "bg-white/6 text-gray-300 hover:bg-white/8 border-white/10"
+                          }`}
+                        >
+                          {p.title}
+                        </Link>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
@@ -1724,8 +1731,6 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [selectedService, setSelectedService] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null);
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
   const [pendingScrollTarget, setPendingScrollTarget] = useState(null);
 
@@ -1965,7 +1970,6 @@ useEffect(() => {
         <Home
           NAVBAR_HEIGHT={NAVBAR_HEIGHT}
           scrollToSection={scrollToSection}
-          setSelectedService={setSelectedService}
           services={services}
           projects={projects}
           aboutData={aboutData}
@@ -1980,7 +1984,6 @@ useEffect(() => {
       element={
         <Services
           NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-          setSelectedService={setSelectedService}
           scrollToSection={scrollToSection}
           services={services}
           contactData={contactData}
@@ -1993,7 +1996,6 @@ useEffect(() => {
       element={
         <ServiceDetail
           NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-          selectedService={selectedService}
           services={services}
         />
       }
@@ -2004,7 +2006,6 @@ useEffect(() => {
       element={
         <Projects
           NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-          setSelectedProject={setSelectedProject}
           scrollToSection={scrollToSection}
           projects={projects}
           contactData={contactData}
@@ -2017,7 +2018,6 @@ useEffect(() => {
       element={
         <ProjectDetail
           NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-          selectedProject={selectedProject}
           projects={projects}
         />
       }
@@ -2028,7 +2028,7 @@ useEffect(() => {
 
       </div>
     </ErrorBoundary>
-  ); 
+  );
 }
 
 export default App;
