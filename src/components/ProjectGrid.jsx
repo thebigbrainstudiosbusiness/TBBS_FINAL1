@@ -13,7 +13,7 @@ const ProjectGrid = React.memo(function ProjectGrid({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 auto-rows-fr">
       {visibleProjects.map((project, idx) => (
-        <motion.div
+        <motion.a
           key={project._id}
           initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -24,7 +24,11 @@ const ProjectGrid = React.memo(function ProjectGrid({
             ease: "easeOut",
           }}
           className="group relative rounded-3xl border border-white/10 bg-gradient-to-br from-black/60 via-black/40 to-black/80 overflow-hidden backdrop-blur cursor-pointer transition-all duration-300 hover:border-red-500/50 flex flex-col"
-          onClick={() => onProjectClick(project)}
+          href={`/projects/${project._id}`}
+          onClick={(e) => {
+            e.preventDefault();
+            onProjectClick(project);
+          }}
         >
           <div className="relative h-48 md:h-56 overflow-hidden flex-shrink-0">
             {(() => {
@@ -72,11 +76,11 @@ const ProjectGrid = React.memo(function ProjectGrid({
               </div>
             </div>
 
-            <button className="w-full mt-4 px-4 py-3 border border-white/20 rounded-full text-sm font-semibold transition hover:bg-white/10">
+            <span className="w-full mt-4 px-4 py-3 border border-white/20 rounded-full text-sm font-semibold transition hover:bg-white/10">
               Open case study →
-            </button>
+            </span>
           </div>
-        </motion.div>
+        </motion.a>
       ))}
     </div>
   );

@@ -1,3 +1,4 @@
+import { useNavigate, useLocation, Routes, Route, useParams } from "react-router-dom";
 import { sanityClient, safeImageUrl } from './sanityClient';
 import React, { useState, useEffect, useMemo, useLayoutEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -193,15 +194,12 @@ function Navbar({
   NAVBAR_HEIGHT,
   scrollToSection,
   nativeScrollToSection,
-  setCurrentPage,
-  currentPage,
-  setPendingScrollTarget
+  setPendingScrollTarget,
+  location
 }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [currentPage]);
+  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
 
 
@@ -233,10 +231,10 @@ return (
       <div className="hidden md:flex items-center space-x-8 font-medium">
         <button
           onClick={() => {
-            if (currentPage === "home") nativeScrollToSection("hero");
+            if (location.pathname === "/") nativeScrollToSection("hero");
             else {
               setPendingScrollTarget("hero");
-              setCurrentPage("home");
+              navigate("/");
             }
           }}
           className="hover:text-red-500 transition"
@@ -246,10 +244,10 @@ return (
 
         <button
           onClick={() => {
-            if (currentPage === "home") nativeScrollToSection("about");
+            if (location.pathname === "/") nativeScrollToSection("about");
             else {
               setPendingScrollTarget("about");
-              setCurrentPage("home");
+              navigate("/");
             }
           }}
           className="hover:text-red-500 transition"
@@ -257,26 +255,27 @@ return (
           About
         </button>
 
-        <button
-          onClick={() => setCurrentPage("services")}
-          className="hover:text-red-500 transition"
-        >
-          Services
-        </button>
+<button
+  onClick={() => navigate("/services")}
+  className="hover:text-red-500 transition"
+>
+  Services
+</button>
 
-        <button
-          onClick={() => setCurrentPage("projects")}
-          className="hover:text-red-500 transition"
-        >
-          Projects
-        </button>
+<button
+  onClick={() => navigate("/projects")}
+  className="hover:text-red-500 transition"
+>
+  Projects
+</button>
+
 
         <button
           onClick={() => {
-            if (currentPage === "home") nativeScrollToSection("contact-home");
+            if (location.pathname === "/") nativeScrollToSection("contact-home");
             else {
               setPendingScrollTarget("contact-home");
-              setCurrentPage("home");
+              navigate("/");
             }
           }}
           className="px-5 py-2 rounded-xl bg-red-600 text-white hover:bg-red-500 transition"
@@ -306,16 +305,27 @@ onClick={() => {
   setMobileOpen(false);
 
   if (label === "Home") {
-    setCurrentPage("home");
-    setPendingScrollTarget("hero");
+    if (location.pathname === "/") nativeScrollToSection("hero");
+    else {
+      setPendingScrollTarget("hero");
+      navigate("/");
+    }
   }
 
-  if (label === "Services") setCurrentPage("services");
-  if (label === "Projects") setCurrentPage("projects");
+  if (label === "Services") {
+    navigate("/services");
+  }
+
+  if (label === "Projects") {
+    navigate("/projects");
+  }
 
   if (label === "About") {
-    setCurrentPage("home");
-    setPendingScrollTarget("about");
+    if (location.pathname === "/") nativeScrollToSection("about");
+    else {
+      setPendingScrollTarget("about");
+      navigate("/");
+    }
   }
 }}
 
@@ -328,8 +338,11 @@ onClick={() => {
           className="w-full bg-red-600 py-3 rounded-xl font-bold"
           onClick={() => {
             setMobileOpen(false);
-            setCurrentPage("home");
-            setPendingScrollTarget("contact-home");
+            if (location.pathname === "/") nativeScrollToSection("contact-home");
+            else {
+              setPendingScrollTarget("contact-home");
+              navigate("/");
+            }
           }}
         >
           Contact
@@ -474,7 +487,8 @@ const handleSubmit = async (e) => {
 // -------------------------
 // HOME (hoisted)
 // -------------------------
-function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPage, services, projects, aboutData, homeHeroData, contactData }) {
+function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, services, projects, aboutData, homeHeroData, contactData }) {
+  const navigate = useNavigate();
 
   const [activeService, setActiveService] = useState(0);
 
@@ -536,8 +550,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
           key={s._id}
           onMouseEnter={() => setActiveService(i)}
           onClick={() => {
-            setSelectedService(s);
-            setCurrentPage("serviceDetail");
+            navigate("/services/" + s._id);
           }}
           className="group cursor-pointer rounded-xl px-2 py-4 md:py-5 transition-colors duration-300 hover:bg-white/[0.04]"
         >
@@ -569,7 +582,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
       ))}
 
       <button
-        onClick={() => setCurrentPage("services")}
+        onClick={() => navigate("/services")}
         className="text-white flex items-center gap-2 mt-4 hover:text-red-500 transition-colors font-semibold"
       >
         <span className="text-2xl">+</span> SEE ALL SERVICES
@@ -606,8 +619,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
           <button
             onClick={() => {
               if (services[activeService]) {
-                setSelectedService(services[activeService]);
-                setCurrentPage("serviceDetail");
+                navigate("/services/" + services[activeService]._id);
               }
             }}
             className="px-6 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(239,68,68,0.25)]"
@@ -668,7 +680,8 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, setSelectedService, setCurrentPa
 // -------------------------
 // SERVICES PAGE (hoisted)
 // -------------------------
-function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToSection, services, contactData }) {
+function Services({ NAVBAR_HEIGHT, setSelectedService, scrollToSection, services, contactData }) {
+  const navigate = useNavigate();
 
   const [highlightedService, setHighlightedService] = useState(services?.[0] || null);
 
@@ -741,8 +754,7 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToS
                       onMouseEnter={() => setHighlightedService(service)}
                       onClick={() => {
                         if (service) {
-                          setSelectedService(service);
-                          setCurrentPage("serviceDetail");
+                          navigate("/services/" + service._id);
                         }
                       }}
                       className="text-left rounded-2xl bg-white/5 border border-white/10 px-5 py-6 transition-all duration-300 hover:border-red-500/50 hover:bg-white/10 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)] hover:shadow-[0_10px_40px_rgba(239,68,68,0.15)]"
@@ -809,8 +821,7 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToS
 
                     <button
                       onClick={() => {
-                        setSelectedService(highlightedService);
-                        setCurrentPage("serviceDetail");
+                        navigate("/services/" + highlightedService._id);
                       }}
                       className="mt-4 inline-flex items-center gap-3 px-5 py-3 bg-red-600 hover:bg-red-500 rounded-full text-sm font-semibold transition-colors"
                     >
@@ -981,10 +992,19 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, setCurrentPage, scrollToS
   );
 }
 
+
 // -------------------------
 // SERVICE DETAIL (hoisted)
 // -------------------------
-function ServiceDetail({ NAVBAR_HEIGHT, selectedService, setCurrentPage }) {
+function ServiceDetail({ NAVBAR_HEIGHT, selectedService, services }) {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const service = selectedService || services?.find((s) => s._id === id);
+
+  if (!service) {
+    return <div className="text-center text-gray-400 py-20">Service not found</div>;
+  }
+
   return (
     <div className="bg-transparent text-white"style={{ paddingTop: NAVBAR_HEIGHT }}>
       <div className="container mx-auto px-4 py-16">
@@ -995,7 +1015,7 @@ function ServiceDetail({ NAVBAR_HEIGHT, selectedService, setCurrentPage }) {
           className="mb-8"
         >
           <button
-            onClick={() => setCurrentPage("services")}
+            onClick={() => navigate("/services")}
             className="inline-flex items-center gap-3 px-6 py-3 bg-white/10 border border-white/15 rounded-full text-gray-200 hover:bg-white/20 transition backdrop-blur"
           >
             <span>←</span> Back to Services
@@ -1016,11 +1036,11 @@ function ServiceDetail({ NAVBAR_HEIGHT, selectedService, setCurrentPage }) {
 
               <div className="relative h-80 md:h-96">
                 {(() => {
-                  const src = safeImageUrl(selectedService?.image, { width: 1400 });
+                  const src = safeImageUrl(service?.image, { width: 1400 });
                   return src && (
                     <img
                       src={src}
-                      alt={selectedService?.title}
+                      alt={service?.title}
                       className="w-full h-full object-cover"
                     />
                   );
@@ -1032,8 +1052,8 @@ function ServiceDetail({ NAVBAR_HEIGHT, selectedService, setCurrentPage }) {
               </div>
 
               <div className="p-8">
-                <h1 className="text-4xl md:text-5xl font-black mb-4">{selectedService?.title}</h1>
-                <p className="text-gray-300 text-lg leading-relaxed">{selectedService?.description}</p>
+                <h1 className="text-4xl md:text-5xl font-black mb-4">{service?.title}</h1>
+                <p className="text-gray-300 text-lg leading-relaxed">{service?.description}</p>
               </div>
             </div>
           </motion.div>
@@ -1047,7 +1067,7 @@ function ServiceDetail({ NAVBAR_HEIGHT, selectedService, setCurrentPage }) {
           >
             <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur">
               <h2 className="text-2xl font-black mb-4">About This Service</h2>
-              <p className="text-gray-300 leading-relaxed">{selectedService?.details}</p>
+              <p className="text-gray-300 leading-relaxed">{service?.details}</p>
             </div>
 
 
@@ -1078,12 +1098,12 @@ function ServiceDetail({ NAVBAR_HEIGHT, selectedService, setCurrentPage }) {
             <p className="text-red-500 text-xs tracking-[0.6em] font-semibold mb-3">SAMPLE WORK</p>
             <h2 className="text-4xl md:text-5xl font-black">See Our Craft in Action</h2>
             <p className="text-gray-300 text-lg mt-3 max-w-2xl mx-auto">
-              Explore our portfolio of {selectedService?.title.toLowerCase()} projects that showcase our expertise and creativity.
+              Explore our portfolio of {service?.title.toLowerCase()} projects that showcase our expertise and creativity.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {Array.isArray(selectedService?.samples) && selectedService.samples.map((img, idx) => {
+            {Array.isArray(service?.samples) && service.samples.map((img, idx) => {
               const src = safeImageUrl(img, { width: 900 });
               if (!src) return null;
               return (
@@ -1131,7 +1151,8 @@ const accentGradients = [
   "from-sky-500/40 via-cyan-500/20 to-transparent",
 ];
 
-function Projects({ NAVBAR_HEIGHT, setSelectedProject, setCurrentPage, scrollToSection, projects, contactData }) {
+function Projects({ NAVBAR_HEIGHT, setSelectedProject, scrollToSection, projects, contactData }) {
+  const navigate = useNavigate();
 
   const processedProjects = useMemo(
     () =>
@@ -1269,8 +1290,7 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, setCurrentPage, scrollToS
                         whileHover={{ scale: 1.03, boxShadow: "0 12px 40px rgba(239,68,68,0.18)" }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => {
-                          setSelectedProject(heroProject);
-                          setCurrentPage("projectDetail");
+                          navigate("/projects/" + heroProject._id);
                         }}
                         className="px-6 py-3 bg-gradient-to-r from-red-700 via-red-600 to-red-500 rounded-full font-semibold hover:brightness-105 transition shadow-lg"
                       >
@@ -1331,8 +1351,7 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, setCurrentPage, scrollToS
         <ProjectGrid
           visibleProjects={visibleProjects}
           onProjectClick={(project) => {
-            setSelectedProject(project);
-            setCurrentPage("projectDetail");
+            navigate("/projects/" + project._id);
           }}
         />
 
@@ -1358,37 +1377,37 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, setCurrentPage, scrollToS
   );
 }
 
+
 // -------------------------
 // PROJECT DETAIL (hoisted)
 // -------------------------
-function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, setCurrentPage, projects }) {
+function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, projects }) {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const project = selectedProject || projects?.find((p) => p._id === id);
+
+  if (!project) {
+    return <div className="text-center text-gray-400 py-20">Project not found</div>;
+  }
 
   const [direction, setDirection] = useState(0);
-
-  const project = selectedProject || (Array.isArray(projects) && projects.length > 0 ? projects[0] : null);
-  if (!project || !Array.isArray(projects)) {
-    return (
-      <div className="text-center text-gray-400 py-20">
-        Content unavailable
-      </div>
-    );
-  }
 
   const idx = Math.max(0, projects.findIndex((p) => p._id === project._id));
   const tagOptions = ["All", "Cinematic", "CGI", "Campaigns", "Experiential", "Realtime"];
   const projectTag = tagOptions[(idx % (tagOptions.length - 1)) + 1];
   const shots = 18 + idx * 3;
 
-  const navigate = (newProject) => {
-    const newIdx = projects.findIndex((p) => p._id === newProject._id);
-    setDirection(newIdx > idx ? 1 : -1);
-    setSelectedProject(newProject);
-  };
+const goToProject = (newProject) => {
+  const newIdx = projects.findIndex((p) => p._id === newProject._id);
+  setDirection(newIdx > idx ? 1 : -1);
+  navigate(`/projects/${newProject._id}`);
+};
+
 
   return (
     <div className="bg-transparent text-white" style={{ paddingTop: NAVBAR_HEIGHT }}>
       <div className="container mx-auto px-4 py-12">
-        <button onClick={() => setCurrentPage("projects")} className="mb-8 px-6 py-3 bg-red-600 text-white rounded-full font-semibold hover:bg-red-500 transition">
+        <button onClick={() => navigate("/projects")} className="mb-8 px-6 py-3 bg-red-600 text-white rounded-full font-semibold hover:bg-red-500 transition">
           ← Back to Projects
         </button>
 
@@ -1592,7 +1611,7 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                         key={p._id}
                         whileHover={{ scale: 1.02, x: 4 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => navigate(p)}
+                        onClick={() => goToProject(p)}
                         className={`w-full text-left px-4 py-3 rounded-lg text-sm transition backdrop-blur-sm border ${
                           p._id === project._id
                             ? "bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white border-red-400 shadow-[0_8px_20px_rgba(239,68,68,0.2)]"
@@ -1702,12 +1721,13 @@ function CinematicBackground() {
 // App Component (now only orchestrates state + layout)
 // -------------------------
 function App() {
-  const [currentPage, setCurrentPage] = useState("home");
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [selectedService, setSelectedService] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
   const [pendingScrollTarget, setPendingScrollTarget] = useState(null);
-
 
   const NAVBAR_HEIGHT = 80;
 
@@ -1783,7 +1803,7 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  if (currentPage === "home") {
+  if (location.pathname === "/") {
     document.documentElement.classList.add("home-page");
     document.body.classList.add("home-page");
   } else {
@@ -1794,11 +1814,11 @@ useEffect(() => {
     document.documentElement.classList.remove("home-page");
     document.body.classList.remove("home-page");
   };
-}, [currentPage]);
+}, [location.pathname]);
 
 
   useEffect(() => {
-    if (currentPage !== "home") {
+    if (location.pathname !== "/") {
       setScrolledPastHero(true);
       return;
     }
@@ -1831,7 +1851,7 @@ useEffect(() => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", update);
     };
-  }, [currentPage]);
+  }, [location.pathname]);
 
 
 
@@ -1881,15 +1901,19 @@ const nativeScrollToSection = (id) => {
 
 
 useEffect(() => {
-  if (isIOS()) return; // 🍎 iOS: skip deferred scroll
+  if (isIOS()) return;
 
-  if (currentPage === "home" && pendingScrollTarget) {
+  if (location.pathname === "/" && pendingScrollTarget) {
+    // Wait for Home DOM to be fully mounted
     requestAnimationFrame(() => {
-      nativeScrollToSection(pendingScrollTarget);
-      setPendingScrollTarget(null);
+      requestAnimationFrame(() => {
+        nativeScrollToSection(pendingScrollTarget);
+        setPendingScrollTarget(null);
+      });
     });
   }
-}, [currentPage, pendingScrollTarget]);
+}, [location.pathname, pendingScrollTarget]);
+
 
 
 // Single source of truth: scroll to top on every page change
@@ -1902,7 +1926,7 @@ useEffect(() => {
 
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
-}, [currentPage]);
+}, [location.pathname]);
 
 
 // Disable browser scroll restoration so it doesn't restore previous positions
@@ -1912,69 +1936,7 @@ useEffect(() => {
   }
 }, []);
 
-  // -------------------------
-// Render helpers
-  // -------------------------
-  const renderPage = () => {
-    switch (currentPage) {
-      case "services":
-        return (
-          <Services
-            NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-            setSelectedService={setSelectedService}
-            setCurrentPage={setCurrentPage}
-            scrollToSection={scrollToSection}
-            services={services}
-            contactData={contactData}
-          />
-        );
-      case "serviceDetail":
-        return (
-          <ServiceDetail
-            NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-            selectedService={selectedService}
-            setCurrentPage={setCurrentPage}
-          />
-        );
-      case "projects":
-        return (
-          <Projects
-            NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-            setSelectedProject={setSelectedProject}
-            setCurrentPage={setCurrentPage}
-            contactData={contactData}
-            scrollToSection={scrollToSection}
-            projects={projects} 
-          />
-        );
-      case "projectDetail":
-        return (
-          <ProjectDetail
-            NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-            selectedProject={selectedProject}
-            setSelectedProject={setSelectedProject}
-            setCurrentPage={setCurrentPage}
-            projects={projects} 
-          />
-        );
-      default:
-        return (
-<Home
-  NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-  scrollToSection={scrollToSection}
-  setSelectedService={setSelectedService}
-  setCurrentPage={setCurrentPage}
-  services={services}
-  projects={projects}
-  aboutData={aboutData}
-  homeHeroData={homeHeroData}
-  contactData={contactData}
-/>
 
-
-        );
-    }
-  };
 
   // -------------------------
 // Render
@@ -1985,19 +1947,84 @@ useEffect(() => {
 
         <CinematicBackground />
 
-  <Navbar
-    scrolledPastHero={scrolledPastHero}
-    NAVBAR_HEIGHT={NAVBAR_HEIGHT}
-    scrollToSection={scrollToSection}
-    nativeScrollToSection={nativeScrollToSection}   // ✅ ADD THIS
-    setCurrentPage={setCurrentPage}
-    currentPage={currentPage}
-    setPendingScrollTarget={setPendingScrollTarget}
-  />
+<Navbar
+  scrolledPastHero={scrolledPastHero}
+  NAVBAR_HEIGHT={NAVBAR_HEIGHT}
+  scrollToSection={scrollToSection}
+  nativeScrollToSection={nativeScrollToSection}
+  setPendingScrollTarget={setPendingScrollTarget}
+  location={location}
+/>
 
-        <div className="relative z-10">
-  {renderPage()}
+
+<div className="relative z-10">
+  <Routes>
+    <Route
+      path="/"
+      element={
+        <Home
+          NAVBAR_HEIGHT={NAVBAR_HEIGHT}
+          scrollToSection={scrollToSection}
+          setSelectedService={setSelectedService}
+          services={services}
+          projects={projects}
+          aboutData={aboutData}
+          homeHeroData={homeHeroData}
+          contactData={contactData}
+        />
+      }
+    />
+
+    <Route
+      path="/services"
+      element={
+        <Services
+          NAVBAR_HEIGHT={NAVBAR_HEIGHT}
+          setSelectedService={setSelectedService}
+          scrollToSection={scrollToSection}
+          services={services}
+          contactData={contactData}
+        />
+      }
+    />
+
+    <Route
+      path="/services/:id"
+      element={
+        <ServiceDetail
+          NAVBAR_HEIGHT={NAVBAR_HEIGHT}
+          selectedService={selectedService}
+          services={services}
+        />
+      }
+    />
+
+    <Route
+      path="/projects"
+      element={
+        <Projects
+          NAVBAR_HEIGHT={NAVBAR_HEIGHT}
+          setSelectedProject={setSelectedProject}
+          scrollToSection={scrollToSection}
+          projects={projects}
+          contactData={contactData}
+        />
+      }
+    />
+
+    <Route
+      path="/projects/:id"
+      element={
+        <ProjectDetail
+          NAVBAR_HEIGHT={NAVBAR_HEIGHT}
+          selectedProject={selectedProject}
+          projects={projects}
+        />
+      }
+    />
+  </Routes>
 </div>
+
 
       </div>
     </ErrorBoundary>
@@ -2005,4 +2032,3 @@ useEffect(() => {
 }
 
 export default App;
-
