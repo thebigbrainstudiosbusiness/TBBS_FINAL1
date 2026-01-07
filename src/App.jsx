@@ -7,11 +7,12 @@ import emailjs from "@emailjs/browser";
 import ProjectGrid from './components/ProjectGrid';
 
 const isIOS = () => {
-  if (typeof navigator === "undefined") return false;
-  return (
-    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-  );
+  return false; // Temporarily disable iOS detection to unify behavior
+  // if (typeof navigator === "undefined") return false;
+  // return (
+  //   /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  //   (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  // );
 };
 
 // -------------------------
@@ -222,7 +223,7 @@ return (
       <img
         src={LOGO_URL}
         alt="Big Brain Studios"
-        className="h-10 md:h-16 w-auto"
+        className="h-18 md:h-26 w-auto"
       />
 
       {/* DESKTOP MENU */}

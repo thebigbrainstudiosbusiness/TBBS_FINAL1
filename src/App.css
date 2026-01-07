@@ -154,10 +154,8 @@ body {
   scrollbar-color: rgba(239, 68, 68, 0.9) rgba(0, 0, 0, 0.2);
 }
 
-@supports (-webkit-touch-callout: none) {
-  body.home-page {
-    overscroll-behavior-y: auto;
-  }
+body.home-page {
+  overscroll-behavior-y: auto;
 }
 
 /* =========================
@@ -225,12 +223,11 @@ video {
   }
 }
 /* ======================================================
-   iOS Safari Compatibility Layer (ADD ONLY – NO REMOVALS)
+   Unified Compatibility Layer
    ====================================================== */
-@supports (-webkit-touch-callout: none) {
 
   /* ----------------------------------
-     Restore native momentum scrolling
+     Unified scrolling behavior
      ---------------------------------- */
   html,
   body {
@@ -238,21 +235,7 @@ video {
   }
 
   /* ----------------------------------
-     iOS does not support custom scrollbars
-     Reset scrollbar overrides safely
-     ---------------------------------- */
-  body {
-    scrollbar-width: auto; /* Firefox fallback, harmless on iOS */
-  }
-
-  body::-webkit-scrollbar {
-    width: auto;
-    height: auto;
-  }
-
-  /* ----------------------------------
-     Prevent Safari from creating
-     phantom inner scroll containers
+     Prevent phantom scroll containers
      ---------------------------------- */
   #root {
     height: auto;
@@ -267,11 +250,25 @@ video {
     overflow-anchor: none;
   }
 
-  /* ----------------------------------
-     Reduce scroll-jank from transforms
-     (Safari-specific rendering quirk)
-     ---------------------------------- */
-  * {
-    -webkit-transform: translateZ(0);
+  /* =========================
+     Mobile Heading Stabilizer
+  ========================= */
+
+  @media (max-width: 640px) {
+    h1 {
+      font-size: clamp(1.9rem, 6vw, 2.5rem);
+      line-height: 1.15;
+      text-wrap: balance;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+      line-height: 1.2;
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-size: clamp(1.35rem, 5vw, 1.8rem);
+      line-height: 1.25;
+    }
   }
-}

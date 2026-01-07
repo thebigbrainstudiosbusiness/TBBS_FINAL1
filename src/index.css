@@ -13,8 +13,16 @@
 
 * {
   box-sizing: border-box;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+}
+
+p, li, span {
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 html,
@@ -52,21 +60,16 @@ body.home-page {
 /* ===============================
    iOS Safari Scroll Fixes (ADD ONLY)
    =============================== */
-@supports (-webkit-touch-callout: none) {
+/* Unified scrolling behavior for all platforms */
+html,
+body {
+  -webkit-overflow-scrolling: touch;
+}
 
-  html,
-  body {
-    /* Restore native momentum scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
-  }
+body {
+  overscroll-behavior-y: auto;
+}
 
-  body {
-    /* Override the global rule ONLY on iOS */
-    overscroll-behavior-y: auto;
-  }
-
-  /* Prevent iOS from creating phantom inner scroll areas */
-  #root {
-    min-height: auto;
-  }
+#root {
+  min-height: auto;
 }
