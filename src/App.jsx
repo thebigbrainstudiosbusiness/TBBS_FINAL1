@@ -198,9 +198,12 @@ function Navbar({
   setPendingScrollTarget
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
- useEffect(() => {
-  setMobileOpen(false);
-}, [currentPage]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [currentPage]);
+
+
 
 return (
   <nav
@@ -223,7 +226,7 @@ return (
       <img
         src={LOGO_URL}
         alt="Big Brain Studios"
-        className="h-18 md:h-26 w-auto"
+        className="h-12 md:h-20 w-auto"
       />
 
       {/* DESKTOP MENU */}
@@ -276,7 +279,7 @@ return (
               setCurrentPage("home");
             }
           }}
-          className="px-5 py-2 rounded-xl bg-red-600 text-white"
+          className="px-5 py-2 rounded-xl bg-red-600 text-white hover:bg-red-500 transition"
         >
           Contact
         </button>
@@ -1391,7 +1394,7 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-10 items-start">
           {/* LEFT: hero, description, images, video */}
-          <div className="order-2 lg:order-1">
+          <div className="order-1 lg:order-1">
             <AnimatePresence mode="wait">
               {project && (
                 <motion.div
@@ -1511,7 +1514,10 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                 </div>
               </motion.div>
             )}
+          </div>
 
+          {/* RIGHT SIDEBAR */}
+          <aside className="order-2 lg:order-2 sticky top-[120px]">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="relative rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl mb-12">
               <div className="absolute inset-0 bg-gradient-to-br from-white/8 to-white/4 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-tr from-red-500/5 via-transparent to-purple-500/5 pointer-events-none" />
@@ -1615,17 +1621,12 @@ function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, setSelectedProject, set
                 </div>
               </div>
             </motion.div>
-
-            <section id="contact-section-project-detail">
-              <ContactSection formId="contact-form-project-detail" />
-            </section>
-          </div>
-
-          {/* RIGHT SIDEBAR */}
-          <aside className="order-1 lg:order-2 sticky top-[120px]">
-            {/* Sidebar content removed - project progress now in main content */}
           </aside>
         </div>
+
+        <section id="contact-section-project-detail">
+          <ContactSection formId="contact-form-project-detail" />
+        </section>
       </div>
     </div>
   );
@@ -2004,3 +2005,4 @@ useEffect(() => {
 }
 
 export default App;
+

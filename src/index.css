@@ -32,6 +32,9 @@ body {
   min-height: 100%;
   background-color: #000;
   overflow-y: auto ;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {

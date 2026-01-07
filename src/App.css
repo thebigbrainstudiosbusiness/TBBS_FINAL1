@@ -259,16 +259,70 @@ video {
       font-size: clamp(1.9rem, 6vw, 2.5rem);
       line-height: 1.15;
       text-wrap: balance;
+      white-space: normal;
     }
 
     h2 {
       font-size: clamp(1.6rem, 5.5vw, 2.1rem);
       line-height: 1.2;
       text-wrap: balance;
+      white-space: normal;
     }
 
     h3 {
       font-size: clamp(1.35rem, 5vw, 1.8rem);
       line-height: 1.25;
+      text-wrap: balance;
+      white-space: normal;
+    }
+  }
+
+  /* =========================
+     Mobile Font Rendering Fixes
+  ========================= */
+
+  @media (max-width: 768px) {
+    /* Disable backdrop-filter on text containers */
+    .bg-white\/5,
+    .bg-white\/8,
+    .bg-white\/10,
+    .bg-gradient-to-br,
+    .bg-gradient-to-r,
+    .backdrop-blur,
+    .backdrop-blur-xl,
+    .backdrop-blur-sm {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Disable problematic CSS properties on text parents */
+    *[style*="backdrop-filter"],
+    *[style*="filter"],
+    *[style*="transform"],
+    *[style*="will-change"] {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      filter: none !important;
+      transform: none !important;
+      will-change: auto !important;
+    }
+
+    /* Text + button alignment stability */
+    .flex:has(p, span, button),
+    .flex:has(h1, h2, h3, h4, h5, h6, button),
+    .flex:has(div, button) {
+      flex-wrap: wrap;
+    }
+
+    .flex:has(p, span, button) > *,
+    .flex:has(h1, h2, h3, h4, h5, h6, button) > *,
+    .flex:has(div, button) > * {
+      max-width: 100%;
+    }
+
+    /* Heading behavior fixes */
+    h1, h2, h3, h4, h5, h6 {
+      white-space: normal;
+      text-wrap: balance;
     }
   }
