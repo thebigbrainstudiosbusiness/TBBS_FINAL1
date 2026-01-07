@@ -999,7 +999,7 @@ function Services({ NAVBAR_HEIGHT, setSelectedService, scrollToSection, services
 function ServiceDetail({ NAVBAR_HEIGHT, selectedService, services }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const service = selectedService || services?.find((s) => s._id === id);
+  const service = services?.find((s) => s._id === id);
 
   if (!service) {
     return <div className="text-center text-gray-400 py-20">Service not found</div>;
@@ -1384,7 +1384,7 @@ function Projects({ NAVBAR_HEIGHT, setSelectedProject, scrollToSection, projects
 function ProjectDetail({ NAVBAR_HEIGHT, selectedProject, projects }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const project = selectedProject || projects?.find((p) => p._id === id);
+  const project = projects?.find((p) => p._id === id);
 
   if (!project) {
     return <div className="text-center text-gray-400 py-20">Project not found</div>;
