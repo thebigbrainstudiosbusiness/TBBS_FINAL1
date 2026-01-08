@@ -52,17 +52,14 @@ const ProjectGrid = React.memo(function ProjectGrid({
                 <div className="flex items-center justify-between gap-4">
                  <h3 className="grid-title font-black">{project.title}</h3>
 
-                  <span className="text-sm text-gray-400">{project.duration}</span>
+                
                 </div>
 
                 <p className="card-body text-gray-300 line-clamp-2">
                   {project.description}
                 </p>
 
-                <div className="flex items-center justify-between text-sm text-gray-400">
-                  <span>Shots: {project.shots}</span>
-                  <span>Passes: {2 + (idx % 3)}</span>
-                </div>
+
 
                 <div className="flex gap-3">
                   {project.images?.slice(0, 3).map((img, imgIdx) => {
