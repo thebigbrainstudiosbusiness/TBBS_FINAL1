@@ -231,7 +231,7 @@ return (
       <img
         src={LOGO_URL}
         alt="Big Brain Studios"
-        className="h-12 md:h-20 w-auto"
+        className="h-22 md:h-30 w-auto"
       />
 
       {/* DESKTOP MENU */}
