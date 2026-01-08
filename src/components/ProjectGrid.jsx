@@ -50,11 +50,14 @@ const ProjectGrid = React.memo(function ProjectGrid({
             <div className="p-6 flex flex-col flex-grow">
               <div className="space-y-4 flex-grow">
                 <div className="flex items-center justify-between gap-4">
-                  <h3 className="text-xl md:text-2xl font-black">{project.title}</h3>
+                 <h3 className="grid-title font-black">{project.title}</h3>
+
                   <span className="text-sm text-gray-400">{project.duration}</span>
                 </div>
 
-                <p className="text-gray-300 line-clamp-2">{project.description}</p>
+                <p className="card-body text-gray-300 line-clamp-2">
+                  {project.description}
+                </p>
 
                 <div className="flex items-center justify-between text-sm text-gray-400">
                   <span>Shots: {project.shots}</span>

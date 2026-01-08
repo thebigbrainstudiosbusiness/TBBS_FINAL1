@@ -105,15 +105,23 @@ function HomeProjectsSection({ projects }) {
                     );
                   })()}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute left-6 bottom-6 right-6 p-6 md:p-8 flex flex-col justify-between">
-                    <div>
-                      <div className="text-xs uppercase tracking-widest text-red-300 font-semibold mb-1">
-                        {activeProject.category || "Featured"}
-                      </div>
-                      <h3 className="text-2xl md:text-3xl font-black mb-1">{activeProject.title}</h3>
-                      <p className="text-gray-300 max-w-xl line-clamp-2">{activeProject.description}</p>
-                    </div>
-                  </div>
+          <div className="absolute left-6 bottom-6 right-6 p-6 md:p-8 flex flex-col justify-between">
+            <div>
+              <div className="text-xs uppercase tracking-widest text-red-300 font-semibold mb-1">
+                {activeProject.category || "Featured"}
+              </div>
+              <h3 className="text-2xl md:text-3xl font-black mb-1">{activeProject.title}</h3>
+              <p className="text-gray-300 max-w-xl line-clamp-2">{activeProject.description}</p>
+            </div>
+            <div className="flex items-center gap-3 mt-4">
+              <Link
+                to={`/projects/${activeProject._id}`}
+                className="px-6 py-3 bg-gradient-to-r from-red-700 via-red-600 to-red-500 rounded-full font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(239,68,68,0.25)]"
+              >
+                View Project →
+              </Link>
+            </div>
+          </div>
                 </div>
               </motion.div>
             )}
@@ -555,7 +563,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, services, projects, aboutData, h
           key={s._id}
           whileHover={{ scale: 1.03 }}
           onMouseEnter={() => setActiveService(i)}
-          className="group cursor-pointer rounded-xl px-2 py-4 md:py-5 transition-colors duration-300 hover:bg-white/[0.04]"
+          className="relative overflow-hidden group cursor-pointer rounded-xl px-2 py-4 md:py-5 transition-colors duration-300 hover:bg-white/[0.04]"
         >
           <Link
             to={`/services/${s._id}`}
@@ -570,7 +578,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, services, projects, aboutData, h
                 } h-2 w-2 rounded-full transition-all`}
               />
               <h3
-                className={`heading-font text-6xl md:text-7xl font-black transition-colors duration-300 ${
+                className={`heading-font display-xl font-black break-words leading-[0.95] transition-colors duration-300 ${
                   i === activeService ? "text-white" : "text-gray-600"
                 }`}
               >
@@ -660,7 +668,7 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, services, projects, aboutData, h
           <div className="max-w-4xl mx-auto text-lg space-y-6 leading-relaxed">
             {aboutData?.body ? (
               aboutData.body.map((block, idx) => (
-                <p key={idx} className="text-xl">
+                <p key={idx} className="long-form">
                   {block.children?.map(child => child.text).join('') || ''}
                 </p>
               ))
@@ -742,7 +750,7 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
           >
             <div className="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-10 backdrop-blur">
               <div className="flex items-center justify-between flex-wrap gap-4">
-                <h2 className="text-3xl sm:text-4xl font-black text-white">Capabilities</h2>
+                <h2 className="text-2xl md:text-3xl font-black text-white">Capabilities</h2>
                 <span className="text-sm uppercase tracking-[0.4em] text-gray-400">Studio Flow</span>
               </div>
 
@@ -757,18 +765,21 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
                       key={service?._id || idx}
                       whileHover={{ scale: 1.03 }}
                       onMouseEnter={() => setHighlightedService(service)}
-                      className="text-left rounded-2xl bg-white/5 border border-white/10 px-5 py-6 transition-all duration-300 hover:border-red-500/50 hover:bg-white/10 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)] hover:shadow-[0_10px_40px_rgba(239,68,68,0.15)]"
+                      className="text-left rounded-2xl overflow-hidden bg-white/5 border border-white/10 px-5 py-6 transition-all duration-300 hover:border-red-500/50 hover:bg-white/10 backdrop-blur shadow-[0_10px_40px_rgba(0,0,0,0.45)] hover:shadow-[0_10px_40px_rgba(239,68,68,0.15)]"
                     >
-                      <Link
-                        to={`/services/${service?._id}`}
-                        className="block"
-                      >
-                        <p className="text-xs uppercase tracking-[0.5em] text-gray-400 mb-3">
-                          0{idx + 1}
-                        </p>
-                        <h3 className="text-2xl font-bold mb-3">{service?.title || 'Loading...'}</h3>
-                        <p className="text-gray-300 text-sm">{service?.description || 'Loading...'}</p>
-                      </Link>
+                        <Link
+                          to={`/services/${service?._id}`}
+                          className="block"
+                        >
+                          <p className="text-xs uppercase tracking-[0.5em] text-gray-400 mb-3">
+                            0{idx + 1}
+                          </p>
+          <h3 className="card-title-sm font-bold mb-3 break-words line-clamp-2">
+  {service?.title || 'Loading...'}
+</h3>
+
+                          <p className="text-gray-300 text-sm">{service?.description || 'Loading...'}</p>
+                        </Link>
                     </motion.div>
                   ))
                 )}
@@ -879,10 +890,7 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
                       {String(idx + 1).padStart(2, '0')}
                     </div>
                     <div className="flex-1">
-                    <h4
-                        className="font-black text-white mb-0.01"
-                        style={{ fontSize: "1.3rem" }}
-                      >
+                    <h4 className="font-black text-white card-title mb-1">
                         {step.title}
                       </h4>
                       <p className="text-gray-200 text-sm leading-relaxed">{step.bullets}</p>
@@ -2032,3 +2040,4 @@ useEffect(() => {
 }
 
 export default App;
+
