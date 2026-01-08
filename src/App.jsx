@@ -577,13 +577,14 @@ function Home({ NAVBAR_HEIGHT, scrollToSection, services, projects, aboutData, h
                     : "bg-white/20"
                 } h-2 w-2 rounded-full transition-all`}
               />
-              <h3
-                className={`heading-font display-xl font-black break-words leading-[0.95] transition-colors duration-300 ${
-                  i === activeService ? "text-white" : "text-gray-600"
-                }`}
-              >
-                {s.title}
-              </h3>
+<h3
+  className={`heading-font display-lg font-black break-words leading-[0.95] transition-colors duration-300 ${
+    i === activeService ? "text-white" : "text-gray-600"
+  }`}
+>
+  {s.title}
+</h3>
+
             </div>
 
             <div
