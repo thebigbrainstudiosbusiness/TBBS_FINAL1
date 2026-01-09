@@ -895,7 +895,7 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
             <div className="space-y-6 md:space-y-8 max-w-xl">
               {[
                 {
-                  title: "CoNcEpT & Pre-Visualization",
+                  title: "Concept & Pre-Visualization",
                   bullets: "• Aligning brand strategy • Storyboarding • Styleframes"
                 },
                 {
