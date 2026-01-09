@@ -370,26 +370,35 @@ return (
 // CONTACT (hoisted)
 // -------------------------
 function ContactSection({ contactData, formId = "contact-form" }) {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+ const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  phone: "",
+  message: ""
+});
+
   const [submitting, setSubmitting] = useState(false);
 
 const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    await emailjs.send(
-      import.meta.env.VITE_EMAILJS_SERVICE,
-      import.meta.env.VITE_EMAILJS_TEMPLATE,
-      {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-      },
-      import.meta.env.VITE_EMAILJS_PUBLIC
-    );
+await emailjs.send(
+  import.meta.env.VITE_EMAILJS_SERVICE,
+  import.meta.env.VITE_EMAILJS_TEMPLATE,
+  {
+    name: formData.name,
+    email: formData.email,
+    phone: formData.phone,
+    message: formData.message,
+  },
+  import.meta.env.VITE_EMAILJS_PUBLIC
+);
+
 
     alert("Message sent successfully!");
-    setFormData({ name: "", email: "", message: "" });
+   setFormData({ name: "", email: "", phone: "", message: "" });
+
   } catch (error) {
     console.error("EmailJS error:", error);
     alert("Failed to send message. Please try again.");
@@ -442,30 +451,51 @@ const handleSubmit = async (e) => {
 
               {/* Right: Form */}
               <form id={formId} onSubmit={handleSubmit} className="relative p-8 sm:p-10 lg:p-12">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="body-font text-sm text-gray-300 mb-2 block">{contactData?.formLabels?.name || "Name"}</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/60 focus:border-red-400/60 transition"
-                      placeholder={contactData?.formPlaceholders?.name || "Your name"}
-                    />
-                  </div>
-                  <div>
-                    <label className="body-font text-sm text-gray-300 mb-2 block">{contactData?.formLabels?.email || "Email"}</label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/60 focus:border-red-400/60 transition"
-                      placeholder={contactData?.formPlaceholders?.email || "you@company.com"}
-                    />
-                  </div>
-                </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+  {/* Name */}
+  <div>
+    <label className="body-font text-sm text-gray-300 mb-2 block">
+      {contactData?.formLabels?.name || "Name"}
+    </label>
+    <input
+      type="text"
+      required
+      value={formData.name}
+      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+      className="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/60 focus:border-red-400/60 transition"
+      placeholder={contactData?.formPlaceholders?.name || "Your name"}
+    />
+  </div>
+
+  {/* Email */}
+  <div>
+    <label className="body-font text-sm text-gray-300 mb-2 block">
+      {contactData?.formLabels?.email || "Email"}
+    </label>
+    <input
+      type="email"
+      required
+      value={formData.email}
+      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      className="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/60 focus:border-red-400/60 transition"
+      placeholder={contactData?.formPlaceholders?.email || "you@company.com"}
+    />
+  </div>
+
+  {/* 📱 MOBILE NUMBER (ADD THIS) */}
+  <div>
+    <label className="body-font text-sm text-gray-300 mb-2 block">
+      {contactData?.formLabels?.phone || "Mobile Number"}
+    </label>
+    <input
+      type="tel"
+      value={formData.phone}
+      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+      className="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/60 focus:border-red-400/60 transition"
+      placeholder={contactData?.formPlaceholders?.phone || "+91 98765 43210"}
+    />
+  </div>
+</div>
 
                 <div className="mt-5">
                   <label className="body-font text-sm text-gray-300 mb-2 block">{contactData?.formLabels?.message || "Message"}</label>
