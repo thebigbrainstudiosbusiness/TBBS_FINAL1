@@ -428,20 +428,17 @@ await emailjs.send(
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               {/* Left: Copy/CTA */}
               <div className="relative p-8 sm:p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-white/10">
-                <div className="max-w-lg">
-                  <h3 className="heading-font font-black clamp-heading-xl mb-4">
-                    {contactData?.leftTitle || "LET'S TALK"}
-                  </h3>
-                  <p className="text-gray-300 body-font mb-8">
-                    {contactData?.leftDescription || "Tell us about your goals and timelines. We'll propose a tailored sprint with milestones and a delivery rhythm that fits your pipeline."}
-                  </p>
-
-
+                <div className="max-w-lg h-full flex flex-col justify-between">
+                  <div>
+                    <h3 className="heading-font font-black clamp-heading-xl mb-4">
+                      {contactData?.leftTitle || "LET'S TALK"}
+                    </h3>
+                    <p className="text-gray-300 body-font mb-8">
+                      {contactData?.leftDescription || "Tell us about your goals and timelines. We'll propose a tailored sprint with milestones and a delivery rhythm that fits your pipeline."}
+                    </p>
+                  </div>
 
                   <div className="flex items-center gap-3">
-                    <button onClick={() => document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth',block:'start'})} className="px-6 py-3 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-500 font-semibold shadow-[0_10px_30px_rgba(239,68,68,0.25)] hover:brightness-110 transition">
-                      {contactData?.primaryButtonText || "Start your brief →"}
-                    </button>
                     <a href={`mailto:${contactData?.emailAddress || "hello@bigbrainstudios.com"}`} className="px-6 py-3 rounded-full border border-white/15 hover:bg-white/10 transition text-gray-200">
                       {contactData?.secondaryButtonText || "Email us"}
                     </a>
@@ -923,19 +920,19 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
                   transition-all duration-300 hover:bg-white/[0.04]
                   hover:border-red-500/50
                 ">
-                <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2">
 
-                    <span className="font-black text-xl text-red-400">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    <div className="flex-1">
-                   <h4 className="font-black text-white card-title mb-1 service-step-title">
+          <span className="font-black text-xl text-red-400">
+            {String(idx + 1).padStart(2, '0')}
+          </span>
+          <div className="flex-1 text-center">
+         <h4 className="font-black text-white card-title mb-1 service-step-title">
 
-                        {step.title}
-                      </h4>
-                      <p className="text-gray-200 text-sm leading-relaxed">{step.bullets}</p>
-                    </div>
-                  </div>
+              {step.title}
+            </h4>
+            <p className="text-gray-200 text-sm leading-relaxed">{step.bullets}</p>
+          </div>
+        </div>
                 </div>
               ))}
             </div>
