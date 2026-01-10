@@ -912,16 +912,18 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
                 }
               ].map((step, idx) => (
                 <div key={step.title} className="
-                  text-left rounded-2xl border px-5 py-6 bg-[#09090b]/60 border-white/10
+                  text-left rounded-2xl border px-5 py-6 bg-[#09090b]/60 border-white/10 min-h-[140px]
                   transition-all duration-300 hover:bg-white/[0.04]
                   hover:border-red-500/50
                 ">
-                  <div className="flex items-start gap-4">
-                    <div className="flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-br from-white/[0.3] to-white/[0.08] backdrop-blur-xl border border-white/[0.3] shadow-[0_4px_18px_rgba(255,255,255,0.15)] font-black text-xl text-white">
+                <div className="flex flex-col items-center gap-2">
+
+                    <span className="font-black text-xl text-red-400">
                       {String(idx + 1).padStart(2, '0')}
-                    </div>
+                    </span>
                     <div className="flex-1">
-                    <h4 className="font-black text-white card-title mb-1">
+                   <h4 className="font-black text-white card-title mb-1 service-step-title">
+
                         {step.title}
                       </h4>
                       <p className="text-gray-200 text-sm leading-relaxed">{step.bullets}</p>
@@ -2071,4 +2073,3 @@ useEffect(() => {
 }
 
 export default App;
-
