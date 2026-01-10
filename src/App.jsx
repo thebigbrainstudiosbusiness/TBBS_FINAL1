@@ -964,7 +964,7 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
             <div className="relative z-10">
               <h3 className="text-2xl font-black mb-8 text-center">What You Can Expect</h3>
 
-              <div className="grid grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {[
                   { text: "Fast Delivery", icon: "⚡", desc: "Rapid turnaround without compromising quality" },
                   { text: "High Retention", icon: "🎯", desc: "Clients keep coming back for results" },
@@ -977,7 +977,7 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
                     whileInView={{ opacity: 1, y: 0, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7, delay: idx * 0.15, type: "spring", stiffness: 100 }}
-                    className="group relative p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 hover:border-red-500/40 transition-all duration-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.1)] backdrop-blur-sm"
+      className="group relative p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 hover:border-red-500/40 transition-all duration-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.1)] backdrop-blur-sm min-h-[140px]"
                   >
                     <div className="flex flex-col items-center text-center gap-3">
                       <motion.span
