@@ -728,6 +728,13 @@ function Services({ NAVBAR_HEIGHT, scrollToSection, services, contactData }) {
 
   const [highlightedService, setHighlightedService] = useState(services?.[0] || null);
 
+  // Set default highlighted service when services load
+  useEffect(() => {
+    if (services && services.length > 0 && !highlightedService) {
+      setHighlightedService(services[0]);
+    }
+  }, [services, highlightedService]);
+
   if (!services || !services.length) {
   return <div className="text-center text-white py-20">Loading services…</div>;
 }
